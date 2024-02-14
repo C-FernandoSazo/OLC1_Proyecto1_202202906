@@ -1,44 +1,40 @@
 package Analizadores;
+import java_cup.runtime.*;
 
-import java_cup.runtime.Symbol;
-
-parser code
+parser code 
 {:
-    private Symbol s;
-
     public void syntax_error(Symbol s){
-        this.s = s;
+        System.out.println("Error sintáctico: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.out.println("Error sintáctico unrecovered: "+s.value+" linea: "+s.left+" columna: "+s.right);
+    }
+:}
 
-    public Symbol getS(){
-        return this.s;
-}
-:};
-
-terminal IDENTIFICADOR, NUMERO, CADENA;
-terminal VAR, DOUBLE, CHAR, PROGRAM, ENDPROGRAM, END, ASIGNACION, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS;
+terminal IDENTIFICADOR, NUMERO, CADENA, DECIMAL;
+terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION, EXCLAMACION, OPENCOMENT, CLOSECOMENT, SALTO;
 
 non terminal inicio, declaracion_variable, declaraciones, tipo_dato, valor;
 
 //Estructura principal del programa
 
-inicio ::= PROGRAM declaraciones ENDPROGRAM
+start with inicio;
+
+inicio ::= PROGRAM declaraciones END PROGRAM
 ;
 
 declaraciones ::= declaracion_variable
                 | declaraciones declaracion_variable
-                ;
+;
 
 declaracion_variable ::= VAR PUNTOS tipo_dato DOS_PUNTOS ASIGNACION valor END PUNTO_Y_COMA
-              ;
+;
 
-tipo_dato ::= DOUBLE {:
-    RESULT = "double";
-:}
-       | CHAR {:
-    RESULT = "char[]";
-:};
-valor ::= CADENA // Para las cadenas
-        | NUMERO          // Para los decimales
-        ;
+tipo_dato ::= DOUBLE
+            | CHAR 
+;
+
+valor ::= CADENA 
+        | NUMERO          
+;
 

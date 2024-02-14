@@ -26,10 +26,10 @@ public class OLCProyecto1 {
         ventana.setLocationRelativeTo(null);
         String ruta = "C:/Users/Cesar/Documents/Programas/2024/OLC1_Proyecto1_202202906/OLCProyecto1/src/Analizadores/Lexico.jflex";
         String[] rutas = {"-parse","Sintax","C:/Users/Cesar/Documents/Programas/2024/OLC1_Proyecto1_202202906/OLCProyecto1/src/Analizadores/Sintax.cup"};
-        generar(ruta,rutas);
+        generador(ruta,rutas);
     }
     
-    public static void generar(String ruta, String[] rutas){
+    public static void generador(String ruta, String[] rutas){
         File archivo;
         String[] jflexArgs = new String[]{ruta};
         try {

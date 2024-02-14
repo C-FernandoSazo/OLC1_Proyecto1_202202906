@@ -1,71 +1,56 @@
-/* ----------- Paquetes e Importaciones ----------- *\
+// Paquetes e importaciones
 
 package Analizadores;
 import java_cup.runtime.Symbol;
 
-/* ----------- Opciones y Declaraciones ----------- *\
-
+// Opciones y Declaraciones
+%%
 %class Analizador_Lexico
 %public
-%cupsym Simbolos
 %cup
 %char
 %line
-%column
 %unicode
 %ignorecase
 
-%init{
-    yyline = 1;
-    yycolumn = 1;
-%init }
+%init{ //Constructor del analizador
+    yyline = 1; 
+    yycolumn=1;
+%init}
+
+%column
 
 // Expresiones Regulares
 
-WHITE = [ \r\t\n]+
+WHITE = [ \r\t]+
 IDENTIFICADOR = [a-zA-Z][a-zA-Z0-9]*
 NUMERO = [0-9]+
-DECIMAL = {ENTERO}\.{ENTERO}
-
-// Tokens
-
-PUNTO_Y_COMA = ";"
-PUNTOS = ":"
-DOS_PUNTOS = "::"
-ASIGNACION = "<-"
-END = "end"
-VAR = "var"
+DECIMAL = {NUMERO}\.{NUMERO}
 CADENA = \"[^\"]*\"
-DOUBLE = "double"
-CHAR = "char[]"
-PROGRAM = "program"
-ENDPROGRAM = "end[\\s]+program"
-
-// Estados
 
 %%
 
-/* ----------- Reglas Lexicas ----------- *\
-<YYINITIAL> {
-    {VAR} { return symbol(sym.VAR); }
-    {DOUBLE} { return symbol(sym.DOUBLE); }
-    {IDENTIFICADOR} { return symbol(sym.IDENTIFICADOR, yytext()); }
-    {NUMERO} { return symbol(sym.NUMERO, Double.parseDouble(yytext())); }
-    {PUNTO_Y_COMA} { return symbol(sym.PUNTO_Y_COMA); }
-    {PUNTOS} { return symbol(sym.PUNTOS); }
-    {DOS_PUNTOS} { return symbol(sym.DOS_PUNTOS); }
-    {ASIGNACION} { return symbol(sym.ASIGNACION); }
-    {END} { return symbol(sym.END); }
-    {PROGRAM} { return symbol(sym.PROGRAM); }
-    {ENDPROGRAM} { return symbol(sym.ENDPROGRAM);
-    {CADENA}     { return symbol(sym.CADENA, yytext());  }
-}
+// Tokens
 
-// Este es un método auxiliar para retornar los símbolos a CUP
-private Symbol symbol(int type) {
-    return new Symbol(type, yyline, yycolumn);
-}
+"var"           { return new Symbol(sym.VAR, yyline,yycolumn, yytext()); }
+";"             { return new Symbol(sym.PUNTO_Y_COMA, yyline,yycolumn, yytext()); }
+":"             { return new Symbol(sym.PUNTOS, yyline,yycolumn, yytext()); }
+"::"            { return new Symbol(sym.DOS_PUNTOS, yyline,yycolumn, yytext()); }
+"<-"            { return new Symbol(sym.ASIGNACION, yyline,yycolumn, yytext()); }
+"end"           { return new Symbol(sym.END, yyline,yycolumn, yytext()); }
+"program"       { return new Symbol(sym.PROGRAM, yyline,yycolumn, yytext()); }
+"double"        { return new Symbol(sym.DOUBLE, yyline,yycolumn, yytext()); }
+"char[]"        { return new Symbol(sym.CHAR, yyline,yycolumn, yytext()); }
+"!"             { return new Symbol(sym.EXCLAMACION, yyline,yycolumn, yytext()); }
+"<!"            { return new Symbol(sym.OPENCOMENT, yyline,yycolumn, yytext()); }
+"!>"            { return new Symbol(sym.CLOSECOMENT, yyline,yycolumn, yytext()); }
+\n              { return new Symbol(sym.SALTO, yyline, yycolumn, yytext()); }
+{CADENA}        { return new Symbol(sym.CADENA, yyline,yycolumn, yytext());  }
+{IDENTIFICADOR} { return new Symbol(sym.IDENTIFICADOR, yyline,yycolumn, yytext()); }
+{NUMERO}        { return new Symbol(sym.NUMERO, yyline,yycolumn, yytext()); }
+{DECIMAL}       { return new Symbol(sym.DECIMAL, yyline,yycolumn, yytext()); } 
+{WHITE}         {}
 
-private Symbol symbol(int type, Object value) {
-    return new Symbol(type, yyline, yycolumn, value);
+. {
+    System.out.println("Lexical error: "+yytext()+" linea: "+yyline+" columna: "+yycolumn);
 }

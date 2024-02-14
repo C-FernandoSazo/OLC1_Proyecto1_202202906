@@ -115,6 +115,11 @@ public class Ventana extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Ejecutar");
+        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu3ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Reportes");
@@ -223,6 +228,17 @@ public class Ventana extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No hay ninguna pestaña seleccionada");
         }
     }//GEN-LAST:event_closePActionPerformed
+
+    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+        int indexPestana = panelEntrada.getSelectedIndex();
+        
+        if (indexPestana != -1){
+        JTextArea textArea = (JTextArea) ((JScrollPane) panelEntrada.getComponentAt(indexPestana)).getViewport().getView();
+        String textoExtraido = textArea.getText();            
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay ninguna pestaña seleccionada para ejecutar el analizador");
+        }
+    }//GEN-LAST:event_jMenu3ActionPerformed
 
     /**
      * @param args the command line arguments
