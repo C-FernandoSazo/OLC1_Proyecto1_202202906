@@ -1,5 +1,8 @@
 package Analizadores;
 import java_cup.runtime.*;
+import java.util.HashMap;
+import Analizadores.Objetos.Variable;
+import Analizadores.Objetos.ConEjecucion;
 
 parser code 
 {:
@@ -12,29 +15,111 @@ parser code
 :}
 
 terminal IDENTIFICADOR, NUMERO, CADENA, DECIMAL;
-terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION, EXCLAMACION, OPENCOMENT, CLOSECOMENT, SALTO;
+terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION;
+terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT;
+terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
 
-non terminal inicio, declaracion_variable, declaraciones, tipo_dato, valor;
+non terminal inicio, declaracion_variable, declaraciones, tipo_dato, valor, declaracion_array, lista_valores, operacion_arit;
+non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica;
 
 //Estructura principal del programa
 
 start with inicio;
 
 inicio ::= PROGRAM declaraciones END PROGRAM
+{:
+    ConEjecucion.imprimirVariables();
+:}
 ;
 
 declaraciones ::= declaracion_variable
                 | declaraciones declaracion_variable
 ;
 
-declaracion_variable ::= VAR PUNTOS tipo_dato DOS_PUNTOS ASIGNACION valor END PUNTO_Y_COMA
+declaracion_variable ::= VAR PUNTOS tipo_dato:tipo DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END PUNTO_Y_COMA
+{:
+    if (tipo.toString() == "double") {
+        Variable var = new Variable(id.toString(), tipo.toString(), v.toString());
+        ConEjecucion.variables.put(id.toString(), var);
+    } else if (tipo.toString() == "char") {
+        Variable var = new Variable(id.toString(), tipo.toString(), v.toString());
+        ConEjecucion.variables.put(id.toString(), var);
+    }  
+
+:}
 ;
 
-tipo_dato ::= DOUBLE
-            | CHAR 
+declaracion_array ::= ARR PUNTOS tipo_dato DOS_PUNTOS ARROBA IDENTIFICADOR ASIGNACION OPENCORCHETE lista_valores CLOSECORCHETE END PUNTO_Y_COMA
 ;
 
-valor ::= CADENA 
-        | NUMERO          
+sentencia_print ::= CONSOLE DOS_PUNTOS DOS_PUNTOS PRINT IGUAL lista_expresiones END PUNTO_Y_COMA
 ;
 
+lista_expresiones ::= lista_expresiones COMA valor
+                    | valor
+;
+
+tipo_dato ::= DOUBLE {: 
+                RESULT = "double"; 
+            :}
+            | CHAR {: 
+                RESULT = "char"; 
+            :}
+;
+
+lista_valores ::= lista_valores COMA valor
+                | valor
+;
+
+operacion_arit ::= 
+    SUMA OPENPAREN valor COMA valor CLOSEPAREN
+    | RESTA OPENPAREN valor COMA valor CLOSEPAREN
+    | MULT OPENPAREN valor COMA valor CLOSEPAREN
+    | DIV OPENPAREN valor COMA valor CLOSEPAREN
+    | MOD OPENPAREN valor COMA valor CLOSEPAREN
+    ;
+
+
+funcion_estadistica ::= MEDIA OPENPAREN arreglo_double CLOSEPAREN
+                 | MEDIANA OPENPAREN arreglo_double CLOSEPAREN
+                 | MODA OPENPAREN arreglo_double CLOSEPAREN
+                 | VARIANZA OPENPAREN arreglo_double CLOSEPAREN
+                 | MAX OPENPAREN arreglo_double CLOSEPAREN
+                 | MIN OPENPAREN arreglo_double CLOSEPAREN
+                 ;
+
+arreglo_double ::= OPENCORCHETE lista_valores CLOSECORCHETE
+                 | ARROBA IDENTIFICADOR
+                 ;
+
+valor ::= valor_double:n {: 
+                    RESULT = Double.valueOf(n.toString()); 
+                :}
+        | valor_string:c  {:
+                    RESULT = c.toString();
+                    :}
+        | IDENTIFICADOR:id {:   
+                    Variable var = ConEjecucion.variables.get(id.toString());
+                        if (var == null) {
+                            // Manejo de error: variable no definida.
+                            throw new Exception("Variable no definida: " + id.toString());
+                        } else {
+                                RESULT = var.getValor(); // Asigna la variable completa para usar su valor más adelante.
+                        }
+                    :}
+;
+
+valor_double ::= NUMERO:n   {: 
+                    RESULT = Double.valueOf(n.toString()); 
+                :}
+                | DECIMAL:d  {:
+                    RESULT = Double.valueOf(d.toString());
+                :}
+               | operacion_arit
+               | funcion_estadistica
+;
+
+valor_string ::= CADENA:c   {:
+                    RESULT = c.toString();
+                    :}
+;

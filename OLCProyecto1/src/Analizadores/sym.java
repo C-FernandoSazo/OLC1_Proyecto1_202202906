@@ -8,25 +8,42 @@ package Analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int CADENA = 4;
-  public static final int CHAR = 11;
-  public static final int DECIMAL = 5;
-  public static final int END = 13;
-  public static final int PUNTOS = 8;
-  public static final int OPENCOMENT = 16;
-  public static final int PROGRAM = 12;
-  public static final int DOS_PUNTOS = 9;
-  public static final int ASIGNACION = 14;
-  public static final int EOF = 0;
-  public static final int EXCLAMACION = 15;
-  public static final int error = 1;
   public static final int NUMERO = 3;
-  public static final int IDENTIFICADOR = 2;
-  public static final int SALTO = 18;
-  public static final int VAR = 6;
+  public static final int MULT = 27;
+  public static final int CHAR = 11;
   public static final int PUNTO_Y_COMA = 7;
-  public static final int CLOSECOMENT = 17;
   public static final int DOUBLE = 10;
+  public static final int RESTA = 26;
+  public static final int DOS_PUNTOS = 9;
+  public static final int CLOSEPAREN = 21;
+  public static final int IDENTIFICADOR = 2;
+  public static final int IGUAL = 22;
+  public static final int OPENPAREN = 20;
+  public static final int ARROBA = 16;
+  public static final int DIV = 28;
+  public static final int SUMA = 25;
+  public static final int MIN = 35;
+  public static final int MEDIANA = 31;
+  public static final int EOF = 0;
+  public static final int DECIMAL = 5;
+  public static final int error = 1;
+  public static final int PROGRAM = 12;
+  public static final int COMA = 15;
+  public static final int CADENA = 4;
+  public static final int MODA = 32;
+  public static final int MOD = 29;
+  public static final int ASIGNACION = 14;
+  public static final int PUNTOS = 8;
+  public static final int VARIANZA = 33;
+  public static final int END = 13;
+  public static final int ARR = 17;
+  public static final int MEDIA = 30;
+  public static final int CLOSECORCHETE = 19;
+  public static final int OPENCORCHETE = 18;
+  public static final int MAX = 34;
+  public static final int VAR = 6;
+  public static final int PRINT = 24;
+  public static final int CONSOLE = 23;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -43,10 +60,27 @@ public class sym {
   "PROGRAM",
   "END",
   "ASIGNACION",
-  "EXCLAMACION",
-  "OPENCOMENT",
-  "CLOSECOMENT",
-  "SALTO"
+  "COMA",
+  "ARROBA",
+  "ARR",
+  "OPENCORCHETE",
+  "CLOSECORCHETE",
+  "OPENPAREN",
+  "CLOSEPAREN",
+  "IGUAL",
+  "CONSOLE",
+  "PRINT",
+  "SUMA",
+  "RESTA",
+  "MULT",
+  "DIV",
+  "MOD",
+  "MEDIA",
+  "MEDIANA",
+  "MODA",
+  "VARIANZA",
+  "MAX",
+  "MIN"
   };
 }
 

@@ -2,10 +2,16 @@
 
 package Analizadores;
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import Analizadores.Objetos.Token;
 
 // Opciones y Declaraciones
 %%
-%class Analizador_Lexico
+%class Scanner
+%{
+public ArrayList<Token> tokens = new ArrayList<>();
+%}
+%x ML_COMMENT 
 %public
 %cup
 %char
@@ -22,34 +28,168 @@ import java_cup.runtime.Symbol;
 
 // Expresiones Regulares
 
-WHITE = [ \r\t]+
 IDENTIFICADOR = [a-zA-Z][a-zA-Z0-9]*
 NUMERO = [0-9]+
 DECIMAL = {NUMERO}\.{NUMERO}
 CADENA = \"[^\"]*\"
+COMENTARIO = "!"[^\n]* "\n"
 
 %%
 
+"<!" { yybegin(ML_COMMENT); }
+
+<ML_COMMENT> {
+    "!>" { yybegin(YYINITIAL); } // Fin del comentario, regresar al estado inicial.
+    . { } // Ignora cualquier carácter.
+    "\n" { yyline++; } // Cuenta los saltos de línea.
+}
+
 // Tokens
 
-"var"           { return new Symbol(sym.VAR, yyline,yycolumn, yytext()); }
-";"             { return new Symbol(sym.PUNTO_Y_COMA, yyline,yycolumn, yytext()); }
-":"             { return new Symbol(sym.PUNTOS, yyline,yycolumn, yytext()); }
-"::"            { return new Symbol(sym.DOS_PUNTOS, yyline,yycolumn, yytext()); }
-"<-"            { return new Symbol(sym.ASIGNACION, yyline,yycolumn, yytext()); }
-"end"           { return new Symbol(sym.END, yyline,yycolumn, yytext()); }
-"program"       { return new Symbol(sym.PROGRAM, yyline,yycolumn, yytext()); }
-"double"        { return new Symbol(sym.DOUBLE, yyline,yycolumn, yytext()); }
-"char[]"        { return new Symbol(sym.CHAR, yyline,yycolumn, yytext()); }
-"!"             { return new Symbol(sym.EXCLAMACION, yyline,yycolumn, yytext()); }
-"<!"            { return new Symbol(sym.OPENCOMENT, yyline,yycolumn, yytext()); }
-"!>"            { return new Symbol(sym.CLOSECOMENT, yyline,yycolumn, yytext()); }
-\n              { return new Symbol(sym.SALTO, yyline, yycolumn, yytext()); }
-{CADENA}        { return new Symbol(sym.CADENA, yyline,yycolumn, yytext());  }
-{IDENTIFICADOR} { return new Symbol(sym.IDENTIFICADOR, yyline,yycolumn, yytext()); }
-{NUMERO}        { return new Symbol(sym.NUMERO, yyline,yycolumn, yytext()); }
-{DECIMAL}       { return new Symbol(sym.DECIMAL, yyline,yycolumn, yytext()); } 
-{WHITE}         {}
+"var" {
+    tokens.add(new Token("VAR", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.VAR, yyline, yycolumn, yytext());
+}
+"," {
+    tokens.add(new Token("COMA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.COMA, yyline, yycolumn, yytext());
+}
+";" {
+    tokens.add(new Token("PUNTO_Y_COMA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.PUNTO_Y_COMA, yyline, yycolumn, yytext());
+}
+":" {
+    tokens.add(new Token("PUNTOS", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.PUNTOS, yyline, yycolumn, yytext());
+}
+"::" {
+    tokens.add(new Token("DOS_PUNTOS", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.DOS_PUNTOS, yyline, yycolumn, yytext());
+}
+"<-" {
+    tokens.add(new Token("ASIGNACION", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.ASIGNACION, yyline, yycolumn, yytext());
+}
+"="  {
+    tokens.add(new Token("IGUAL", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.IGUAL, yyline, yycolumn, yytext());
+}
+"end" {
+    tokens.add(new Token("END", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.END, yyline, yycolumn, yytext());
+}
+"program" {
+    tokens.add(new Token("PROGRAM", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.PROGRAM, yyline, yycolumn, yytext());
+    
+}
+"double"  {
+    tokens.add(new Token("DOUBLE", yyline+1, yycolumn+1, yytext()));
+    System.out.println("LOGRADO DOUBLE");
+    return new Symbol(sym.DOUBLE, yyline, yycolumn, yytext());
+}
+"char[]"  {
+    tokens.add(new Token("CHAR", yyline+1, yycolumn+1, yytext()));
+    System.out.println("LOGRADO CHAR");
+    return new Symbol(sym.CHAR, yyline, yycolumn, yytext());
+}
+"@"      {
+    tokens.add(new Token("ARROBA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.ARROBA, yyline, yycolumn, yytext());
+}
+"arr"    {
+    tokens.add(new Token("ARR", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.ARR, yyline, yycolumn, yytext());
+}
+"["      {
+    tokens.add(new Token("OPENCORCHETE", yyline+1, yycolumn+1, yytext()));
+    System.out.println("SE DETECTO CORCHETE");
+    return new Symbol(sym.OPENCORCHETE, yyline, yycolumn, yytext());
+}
+"]"      {
+    tokens.add(new Token("CLOSECORCHETE", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.CLOSECORCHETE, yyline, yycolumn, yytext());
+}
+"("      {
+    tokens.add(new Token("OPENPAREN", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.OPENPAREN, yyline, yycolumn, yytext());
+}
+")"      {
+    tokens.add(new Token("CLOSEPAREN", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.CLOSEPAREN, yyline, yycolumn, yytext());
+}
+"sum"    {
+    tokens.add(new Token("SUMA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.SUMA, yyline, yycolumn, yytext());
+}
+"res"    {
+    tokens.add(new Token("RESTA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.RESTA, yyline, yycolumn, yytext());
+}
+"mul"    {
+    tokens.add(new Token("MULTIPLICACION", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MULT, yyline, yycolumn, yytext());
+}
+"div"    {
+    tokens.add(new Token("DIVISION", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.DIV, yyline, yycolumn, yytext());
+}
+"mod"    {
+    tokens.add(new Token("MOD", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MOD, yyline, yycolumn, yytext());
+}
+"media"    {
+    tokens.add(new Token("MEDIA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MEDIA, yyline, yycolumn, yytext());
+}
+"mediana"  {
+    tokens.add(new Token("MEDIANA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MEDIANA, yyline, yycolumn, yytext());
+}
+"moda"      {
+    tokens.add(new Token("MODA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MODA, yyline, yycolumn, yytext());
+}
+"varianza"   {
+    tokens.add(new Token("VARIANZA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.VARIANZA, yyline, yycolumn, yytext());
+}
+"max"        {
+    tokens.add(new Token("MAX", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MAX, yyline, yycolumn, yytext());
+}
+"min"        {
+    tokens.add(new Token("MIN", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.MIN, yyline, yycolumn, yytext());
+}
+"console"    {
+    tokens.add(new Token("CONSOLE", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.CONSOLE, yyline, yycolumn, yytext());
+}
+"print"      {
+    tokens.add(new Token("PRINT", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.PRINT, yyline, yycolumn, yytext());
+}
+{CADENA}        {
+    tokens.add(new Token("CADENA", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.CADENA, yyline, yycolumn, yytext());
+}
+{IDENTIFICADOR} {
+    tokens.add(new Token("IDENTIFICADOR", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());
+}
+{NUMERO}       {
+    tokens.add(new Token("NUMERO", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.NUMERO, yyline, yycolumn, yytext());
+}
+{DECIMAL}      {
+    tokens.add(new Token("DECIMAL", yyline+1, yycolumn+1, yytext()));
+    return new Symbol(sym.DECIMAL, yyline, yycolumn, yytext());
+}
+
+{COMENTARIO}   { /* Ignora el comentario de una línea */ }
+
+[ \t\r\n\f]     {/* Espacios en blanco se ignoran */}
 
 . {
     System.out.println("Lexical error: "+yytext()+" linea: "+yyline+" columna: "+yycolumn);

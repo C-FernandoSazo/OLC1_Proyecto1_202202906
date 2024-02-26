@@ -1,0 +1,11 @@
+PROGRAM
+    VAR:DOUBLE::numero<-2.5END;
+    ! Esto es un comentario
+    <! Esto es
+    Un comentario de 
+        Multilinea!>
+    VAR:CHAR[]::cadena<-"cadena"END;
+    
+
+END PROGRAM
+
