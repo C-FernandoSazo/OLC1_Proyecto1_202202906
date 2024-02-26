@@ -11,6 +11,8 @@ import Analizadores.Scanner;
 import java.io.FileReader;
 import java.io.FileWriter;
 import Analizadores.Objetos.Token;
+import Analizadores.Objetos.Errores;
+import Analizadores.Objetos.ConEjecucion;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -23,16 +25,11 @@ public class test {
         try {
             FileReader fileReader = new FileReader("C:/Users/Cesar/Documents/Programas/2024/OLC1_Proyecto1_202202906/OLCProyecto1/src/test/prueba.df");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            System.out.println(bufferedReader);
-            Scanner scanner = new Scanner(bufferedReader);
-            System.out.println("IMPRIMIENDO TOKENS");
-            for(Token token : scanner.tokens) {
-            System.out.println("Token: " + token.getTipo() + " Linea: " + token.getLinea() + " Columna: " + token.getColumna() + " Valor: " + token.getValor());
-            }   
-            
+            Scanner scanner = new Scanner(bufferedReader);         
             Parser parser = new Parser(scanner);
             parser.parse();
-            generarHTML(scanner.tokens);
+            generarHTML_Tokens(scanner.tokens);
+            generarHTML_Errores(ConEjecucion.errores);
             System.out.println("Analisis terminado");
         } catch (Exception e) {
           //  System.out.println(e);
@@ -40,7 +37,7 @@ public class test {
         }
     }
    
-   public static void generarHTML(ArrayList<Token> tokens) {
+   public static void generarHTML_Tokens(ArrayList<Token> tokens) {
     try {
         FileWriter fileWriter = new FileWriter("tokens.html");
         try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
@@ -52,7 +49,8 @@ public class test {
             printWriter.println("<table border=\"1\">");
             printWriter.println("<tr><th>Tipo</th><th>Línea</th><th>Columna</th><th>Valor</th></tr>");
             for (Token token : tokens) {
-                printWriter.println("<tr><td>" + token.tipo + "</td><td>" + token.linea + "</td><td>" + token.columna + "</td><td>" + token.valor + "</td></tr>");
+                printWriter.println("<tr><td>" + token.getTipo() + "</td><td>" + token.getLinea() + "</td><td>" + 
+                        token.getColumna() + "</td><td>" + token.getValor() + "</td></tr>");
             }
             printWriter.println("</table>");
             printWriter.println("</body>");
@@ -61,6 +59,31 @@ public class test {
         }
     } catch (Exception e) {
         e.printStackTrace();
+        }
     }
-}
+   
+   public static void generarHTML_Errores(ArrayList<Errores> errores) {
+    try {
+        FileWriter fileWriter = new FileWriter("Errores.html");
+        try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
+            printWriter.println("<!DOCTYPE html>");
+            printWriter.println("<html>");
+            printWriter.println("<head><title>Errores Reconocidos</title></head>");
+            printWriter.println("<body>");
+            printWriter.println("<h1>Errores</h1>");
+            printWriter.println("<table border=\"1\">");
+            printWriter.println("<tr><th>Tipo</th><th>Línea</th><th>Columna</th><th>Lexema</th></tr>");
+            for (Errores error : errores) {
+                printWriter.println("<tr><td>" + error.getTipo() + "</td><td>" + error.getLinea() + "</td><td>" + 
+                        error.getColumna() + "</td><td>" + error.getLexema() + "</td></tr>");
+            }
+            printWriter.println("</table>");
+            printWriter.println("</body>");
+            printWriter.println("</html>");
+            System.out.println("ARCHIVO HTML REALIZADO CON EXITO");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        }
+    }
 }

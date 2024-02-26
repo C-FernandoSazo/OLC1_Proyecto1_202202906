@@ -1,11 +1,23 @@
 PROGRAM
     VAR:DOUBLE::numero<-2.5END;
+
+    var:double:: suma <- SUM(numero, 2) end;
+    $&
+
     ! Esto es un comentario
     <! Esto es
     Un comentario de 
         Multilinea!>
-    VAR:CHAR[]::cadena<-"cadena"END;
-    
+    VAR:CHAR[]::cadena<-"EstoNo es Cadena"END;
+
+    VAR:CHAR[]::cade<-"cadena"END;
+
+    console::print=1,2,3 end;
+    console::print=cadena,"nombre" end;
+    console::print=cadena,suma end;
+    console::print="cadena",suma end;
+
+    arr:double::@darray <- [1, 2, 3, 4, 5] end;
 
 END PROGRAM
 

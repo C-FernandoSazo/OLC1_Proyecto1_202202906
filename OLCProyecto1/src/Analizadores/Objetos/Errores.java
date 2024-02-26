@@ -8,20 +8,20 @@ package Analizadores.Objetos;
  *
  * @author Cesar
  */
-public class Token {
+public class Errores {
     
     private String tipo;
     private int linea;
     private int columna;
-    private String valor;
+    private String lexema;
     
-    public Token(String tipo, int linea, int columna, String valor) {
+    public Errores(String tipo, int linea, int columna, String lexema){
         this.tipo = tipo;
         this.linea = linea;
         this.columna = columna;
-        this.valor = valor;
+        this.lexema = lexema;
     }
-    
+
     public String getTipo() {
         return tipo;
     }
@@ -34,8 +34,8 @@ public class Token {
         return columna;
     }
 
-    public String getValor() {
-        return valor;
+    public String getLexema() {
+        return lexema;
     }
     
 }

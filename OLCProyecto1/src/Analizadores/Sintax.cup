@@ -1,12 +1,14 @@
 package Analizadores;
 import java_cup.runtime.*;
 import java.util.HashMap;
-import Analizadores.Objetos.Variable;
 import Analizadores.Objetos.ConEjecucion;
+import Analizadores.Objetos.Errores;
+import java.util.ArrayList;
 
 parser code 
 {:
     public void syntax_error(Symbol s){
+        ConEjecucion.errores.add(new Errores("SINTACTICO", s.left, s.right, s.value.toString()));   
         System.out.println("Error sintáctico: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
@@ -19,8 +21,8 @@ terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIG
 terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT;
 terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
 
-non terminal inicio, declaracion_variable, declaraciones, tipo_dato, valor, declaracion_array, lista_valores, operacion_arit;
-non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica;
+non terminal inicio, declaracion_variable, declaraciones, sentencia, valor, declaracion_array, lista_valoresDouble, operacion_arit;
+non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica, valor_print;
 
 //Estructura principal del programa
 
@@ -32,52 +34,88 @@ inicio ::= PROGRAM declaraciones END PROGRAM
 :}
 ;
 
-declaraciones ::= declaracion_variable
-                | declaraciones declaracion_variable
+declaraciones ::= declaraciones sentencia
+                | sentencia
 ;
 
-declaracion_variable ::= VAR PUNTOS tipo_dato:tipo DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END PUNTO_Y_COMA
-{:
-    if (tipo.toString() == "double") {
-        Variable var = new Variable(id.toString(), tipo.toString(), v.toString());
-        ConEjecucion.variables.put(id.toString(), var);
-    } else if (tipo.toString() == "char") {
-        Variable var = new Variable(id.toString(), tipo.toString(), v.toString());
-        ConEjecucion.variables.put(id.toString(), var);
-    }  
-
-:}
+sentencia ::= declaracion_variable
+                | sentencia_print
+                | declaracion_array
 ;
 
-declaracion_array ::= ARR PUNTOS tipo_dato DOS_PUNTOS ARROBA IDENTIFICADOR ASIGNACION OPENCORCHETE lista_valores CLOSECORCHETE END PUNTO_Y_COMA
+declaracion_variable ::= VAR PUNTOS DOUBLE DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END PUNTO_Y_COMA
+                {: ConEjecucion.variablesDouble.put(id.toString(), Double.valueOf(v.toString())); :}   
+    
+                | VAR PUNTOS CHAR DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END PUNTO_Y_COMA
+                     {: ConEjecucion.variablesChar.put(id.toString(), v.toString()); :} 
 ;
 
-sentencia_print ::= CONSOLE DOS_PUNTOS DOS_PUNTOS PRINT IGUAL lista_expresiones END PUNTO_Y_COMA
+declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE END PUNTO_Y_COMA
+                {:
+                    // Casting seguro a ArrayList<Double>
+                    ArrayList<Double> listaActual;
+                    if (lista instanceof ArrayList) {
+                        listaActual = (ArrayList<Double>) lista;
+                    } else {
+                        // Manejo de error o inicialización alternativa
+                        listaActual = new ArrayList<Double>();
+                    }
+                    double[] array = new double[listaActual.size()];
+                    for (int i = 0; i < listaActual.size(); i++) {
+                        array[i] = listaActual.get(i);
+                    }
+                    ConEjecucion.arrays.put(id.toString(), array);
+                :}
 ;
 
-lista_expresiones ::= lista_expresiones COMA valor
-                    | valor
+lista_valoresDouble ::= lista_valoresDouble:lista COMA valor_double:var {:
+                    ArrayList<Double> listaActual = (ArrayList<Double>) lista;
+                    listaActual.add((Double) var); 
+                    RESULT = listaActual; 
+                :}
+                | valor_double:var 
+                {:
+                    ArrayList<Double> nuevaLista = new ArrayList<Double>();
+                    nuevaLista.add((Double) var);
+                    RESULT = nuevaLista;
+                :}
 ;
 
-tipo_dato ::= DOUBLE {: 
-                RESULT = "double"; 
-            :}
-            | CHAR {: 
-                RESULT = "char"; 
-            :}
+sentencia_print ::= CONSOLE DOS_PUNTOS PRINT IGUAL lista_expresiones:text END PUNTO_Y_COMA {:
+                    System.out.println("Salida: "+text.toString());
+                :}
 ;
 
-lista_valores ::= lista_valores COMA valor
-                | valor
+lista_expresiones ::= lista_expresiones:text1 COMA valor_print:text2 {:
+                        RESULT = text1.toString() + ", " + text2.toString();
+                        :}
+                    | valor_print:text   {: RESULT = text.toString(); :}
 ;
 
-operacion_arit ::= 
-    SUMA OPENPAREN valor COMA valor CLOSEPAREN
-    | RESTA OPENPAREN valor COMA valor CLOSEPAREN
-    | MULT OPENPAREN valor COMA valor CLOSEPAREN
-    | DIV OPENPAREN valor COMA valor CLOSEPAREN
-    | MOD OPENPAREN valor COMA valor CLOSEPAREN
-    ;
+
+operacion_arit ::=
+      SUMA OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      {: 
+          RESULT = new Double(((Double)num1).doubleValue() + ((Double)num2).doubleValue()); 
+      :}
+    | RESTA OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      {: 
+          RESULT = new Double(((Double)num1).doubleValue() - ((Double)num2).doubleValue()); 
+      :}
+    | MULT OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      {: 
+          RESULT = new Double(((Double)num1).doubleValue() * ((Double)num2).doubleValue()); 
+      :}
+    | DIV OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      {: 
+          // Asegúrate de manejar la división por cero aquí.
+          RESULT = new Double(((Double)num1).doubleValue() / ((Double)num2).doubleValue()); 
+      :}
+    | MOD OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      {: 
+          RESULT = new Double(((Double)num1).doubleValue() % ((Double)num2).doubleValue()); 
+      :}
+;
 
 
 funcion_estadistica ::= MEDIA OPENPAREN arreglo_double CLOSEPAREN
@@ -88,25 +126,41 @@ funcion_estadistica ::= MEDIA OPENPAREN arreglo_double CLOSEPAREN
                  | MIN OPENPAREN arreglo_double CLOSEPAREN
                  ;
 
-arreglo_double ::= OPENCORCHETE lista_valores CLOSECORCHETE
+arreglo_double ::= OPENCORCHETE lista_valoresDouble CLOSECORCHETE
                  | ARROBA IDENTIFICADOR
                  ;
 
-valor ::= valor_double:n {: 
+valor ::= |valor_double:n {:
                     RESULT = Double.valueOf(n.toString()); 
-                :}
+                    :}
         | valor_string:c  {:
                     RESULT = c.toString();
                     :}
-        | IDENTIFICADOR:id {:   
-                    Variable var = ConEjecucion.variables.get(id.toString());
-                        if (var == null) {
-                            // Manejo de error: variable no definida.
-                            throw new Exception("Variable no definida: " + id.toString());
-                        } else {
-                                RESULT = var.getValor(); // Asigna la variable completa para usar su valor más adelante.
-                        }
+
+;
+
+valor_print ::= NUMERO:n   {: 
+                    RESULT = Double.valueOf(n.toString()); 
+                :}
+                | DECIMAL:d  {:
+                    RESULT = Double.valueOf(d.toString());
+                :}
+                | CADENA:c   {:
+                    RESULT = c.toString();
                     :}
+                | IDENTIFICADOR:id  {:
+                    Double num = ConEjecucion.variablesDouble.get(id.toString());
+                    String str = ConEjecucion.variablesChar.get(id.toString());
+                    if (str == null && num == null) {
+                        // Manejo de error: variable no definida.
+                        throw new Exception("Variable no definida: " + id.toString());
+                    } else if(num != null){
+                        RESULT = num;
+                        } else if(str != null){
+                            RESULT = str;
+                            }
+                    :}
+
 ;
 
 valor_double ::= NUMERO:n   {: 
@@ -115,8 +169,17 @@ valor_double ::= NUMERO:n   {:
                 | DECIMAL:d  {:
                     RESULT = Double.valueOf(d.toString());
                 :}
-               | operacion_arit
-               | funcion_estadistica
+                | operacion_arit:op {: RESULT = op; :}
+                | funcion_estadistica:est {: RESULT = est; :}
+                | IDENTIFICADOR:id  {:
+                    Double num = ConEjecucion.variablesDouble.get(id.toString());
+                    if (num == null) {
+                        // Manejo de error: variable no definida.
+                        throw new Exception("Variable no definida: " + id.toString());
+                    } else {
+                        RESULT = num;
+                        } 
+                    :}
 ;
 
 valor_string ::= CADENA:c   {:
