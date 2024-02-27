@@ -5,7 +5,6 @@
 
 package test;
 import java.io.BufferedReader;
-import java.io.StringReader;
 import Analizadores.Parser;
 import Analizadores.Scanner;
 import java.io.FileReader;
@@ -36,7 +35,7 @@ public class test {
           e.printStackTrace();
         }
     }
-   
+    
    public static void generarHTML_Tokens(ArrayList<Token> tokens) {
     try {
         FileWriter fileWriter = new FileWriter("tokens.html");
@@ -51,7 +50,7 @@ public class test {
             for (Token token : tokens) {
                 printWriter.println("<tr><td>" + token.getTipo() + "</td><td>" + token.getLinea() + "</td><td>" + 
                         token.getColumna() + "</td><td>" + token.getValor() + "</td></tr>");
-            }
+}
             printWriter.println("</table>");
             printWriter.println("</body>");
             printWriter.println("</html>");

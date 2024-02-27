@@ -19,5 +19,9 @@ PROGRAM
 
     arr:double::@darray <- [1, 2, 3, 4, 5] end;
 
+    var:DOUBLE:: medium <- media([1, 2, 4, 5, 4, 1]) end; 
+
+    arr:char[]::@carray <- ["12", "2", "32"] end;
+
 END PROGRAM
 
