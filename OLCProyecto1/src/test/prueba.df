@@ -19,9 +19,22 @@ PROGRAM
 
     arr:double::@darray <- [1, 2, 3, 4, 5] end;
 
-    var:DOUBLE:: medium <- media([1, 2, 4, 5, 4, 1]) end; 
+    var:double:: operacion <- MUL( SUM(7,3) , RES(7, DIV(25,5) )) end;
 
+    arr:DOUBLE:: @ medium <- [SUM(7,3), DIV(25,5)]  end;
+    var:DOUBLE:: maximo <- max([1, 2, 4, 5, 4, 1]) end; 
+    var:DOUBLE:: minimo <- min([1, 2, 4, 5, 4, 1]) end;
+ 
     arr:char[]::@carray <- ["12", "2", "32"] end;
+
+    var:DOUBLE:: medianas <- mediana([1, 2, 4, 5, 4, 1]) end; 
+    var:DOUBLE:: Mode <- moda([1, 2, 4, 5, 4, 1]) end; 
+    var:DOUBLE:: varia <- varianza([1, 2, 4, 5, 4, 1]) end; 
+
+    var:double:: med1 <- Media([1, 2, SUM(3, operacion), 4, suma]) end;
+
+    var:double:: med2 <- Media([media(@medium), moda(@darray)]) end;
+
 
 END PROGRAM
 

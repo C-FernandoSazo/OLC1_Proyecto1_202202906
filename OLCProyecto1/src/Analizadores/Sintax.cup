@@ -18,13 +18,13 @@ parser code
 :}
 
 terminal IDENTIFICADOR, NUMERO, CADENA, DECIMAL;
-terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION;
-terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT;
+terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION, ACCESO;
+terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT, COLUMN;
 terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
 
 non terminal inicio, declaracion_variable, declaraciones, sentencia, valor, declaracion_array, lista_valoresDouble, operacion_arit;
 non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica, valor_print;
-non terminal lista_valoresChar;
+non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn;
 
 //Estructura principal del programa
 
@@ -122,6 +122,10 @@ lista_expresiones ::= lista_expresiones:text1 COMA valor_print:text2 {:
                     | valor_print:text   {: RESULT = text.toString(); :}
 ;
 
+sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor_string ACCESO lista_expresionesColumn END PUNTO_Y_COMA
+
+
+lista_expresionesColumn ::= arreglo_double
 
 operacion_arit ::=
       SUMA OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
@@ -153,7 +157,7 @@ funcion_estadistica ::= MEDIA OPENPAREN arreglo_double:arreglo CLOSEPAREN
                         double[] array = (double[]) arreglo;
                         double media = 0;
                         for (int i=0; i < array.length; i++) {
-                            media = media + array[i];
+                            media += array[i];
                         }
                         media = media / array.length;
                         RESULT = media;
@@ -168,14 +172,71 @@ funcion_estadistica ::= MEDIA OPENPAREN arreglo_double:arreglo CLOSEPAREN
                             mediana =  array[n/2];
                             RESULT = mediana;
                         } else {
-                                mediana = (array[(n-1)/2] + array[n/2]) / 2.0;
+                                mediana = (array[(n/2)-1] + array[n/2]) / 2;
                                 RESULT = mediana;
                             }
                     :}
                  | MODA OPENPAREN arreglo_double:arreglo CLOSEPAREN
+                    {:
+                        double[] array = (double[]) arreglo;
+                        int maxRepeticion = 0;
+                        double moda = 0;
+                        for (int i=0; i < array.length; i++) {
+                            int numRepeticiones = 0;
+                            for (int j=0; j<array.length; j++) {
+                                if(array[i] == array[j]) {
+                                    numRepeticiones++;
+                                }
+                                if (numRepeticiones>maxRepeticion) {    
+                                    moda = array[i];
+                                    maxRepeticion = numRepeticiones;
+                                }
+                            }
+                        }
+                        RESULT = moda;
+                    :}
                  | VARIANZA OPENPAREN arreglo_double:arreglo CLOSEPAREN
+                    {:
+                        double[] array = (double[]) arreglo;
+                        double media = 0;
+                        for (int i=0; i < array.length; i++) {
+                            media += array[i];
+                        }
+                        media = media / array.length;
+
+                        double sumaCuadrados = 0;
+                        double varianza = 0;
+                        for (double num : array){
+                            sumaCuadrados += Math.pow(num - media, 2);
+                        }
+                        varianza = sumaCuadrados / array.length;
+                        RESULT = varianza;
+                    :}
                  | MAX OPENPAREN arreglo_double:arreglo CLOSEPAREN
+                    {:
+                        double[] array = (double[]) arreglo;
+                        double max = 0;
+                        for (int i = 0; i<array.length; i++) {
+                            if (array[i] > max) {
+                                max = array[i];
+                            }
+                        }
+                        RESULT = max;
+                    :}
                  | MIN OPENPAREN arreglo_double:arreglo CLOSEPAREN
+                    {:
+                        double[] array = (double[]) arreglo;
+                        double min = 0;
+                        for (int i = 0; i<array.length; i++) {
+                            if (min == 0){
+                                min = array[i];
+                            }
+                            else if (array[i] < min) {
+                                min = array[i];
+                            }
+                        }
+                        RESULT = min;
+                    :}
                  ;
 
 arreglo_double ::= OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE {:
@@ -201,6 +262,29 @@ arreglo_double ::= OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE {:
                         }
                  :}
 ;
+
+arreglo_char ::= OPENCORCHETE lista_valoresChar:lista CLOSECORCHETE {:
+                    ArrayList<String> listaActual;
+                    if (lista instanceof ArrayList) {
+                        listaActual = (ArrayList<String>) lista;
+                    } else {
+                        // Manejo de error o inicialización alternativa
+                        listaActual = new ArrayList<String>();
+                    }
+                    String[] array = new String[listaActual.size()];
+                    for (int i = 0; i < listaActual.size(); i++) {
+                        array[i] = listaActual.get(i);
+                    }
+                    RESULT = array;
+                :}
+                | ARROBA IDENTIFICADOR:id  {:
+                    String[] array = ConEjecucion.arrayChar.get(id.toString());
+                    if (array != null) {
+                        RESULT = array;
+                    } else {
+                            throw new Exception("Array no definido: " + id.toString());
+                        }
+                :}
 
 valor ::= |valor_double:n {:
                     RESULT = Double.valueOf(n.toString()); 

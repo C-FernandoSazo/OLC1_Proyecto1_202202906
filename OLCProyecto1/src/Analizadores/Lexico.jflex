@@ -72,6 +72,10 @@ COMENTARIO = "!"[^\n]* "\n"
     tokens.add(new Token("ASIGNACION", yyline, yycolumn, yytext()));
     return new Symbol(sym.ASIGNACION, yyline, yycolumn, yytext());
 }
+"->" {
+    tokens.add(new Token("ACCESO", yyline, yycolumn, yytext()));
+    return new Symbol(sym.ACCESO, yyline, yycolumn, yytext());
+}
 "="  {
     tokens.add(new Token("IGUAL", yyline, yycolumn, yytext()));
     return new Symbol(sym.IGUAL, yyline, yycolumn, yytext());
@@ -170,6 +174,10 @@ COMENTARIO = "!"[^\n]* "\n"
 "print"      {
     tokens.add(new Token("PRINT", yyline, yycolumn, yytext()));
     return new Symbol(sym.PRINT, yyline, yycolumn, yytext());
+}
+"column"    {
+    tokens.add(new Token("COLUMN", yyline, yycolumn, yytext()));
+    return new Symbol(sym.COLUMN, yyline, yycolumn, yytext());
 }
 {CADENA}        {
     tokens.add(new Token("CADENA", yyline, yycolumn, yytext()));

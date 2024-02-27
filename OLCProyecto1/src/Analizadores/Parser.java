@@ -663,7 +663,7 @@ class CUP$Parser$actions {
                         double[] array = (double[]) arreglo;
                         double media = 0;
                         for (int i=0; i < array.length; i++) {
-                            media = media + array[i];
+                            media += array[i];
                         }
                         media = media / array.length;
                         RESULT = media;
@@ -688,7 +688,7 @@ class CUP$Parser$actions {
                             mediana =  array[n/2];
                             RESULT = mediana;
                         } else {
-                                mediana = (array[(n-1)/2] + array[n/2]) / 2.0;
+                                mediana = (array[(n/2)-1] + array[n/2]) / 2;
                                 RESULT = mediana;
                             }
                     
@@ -703,7 +703,24 @@ class CUP$Parser$actions {
 		int arregloleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int arregloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object arreglo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-
+		
+                        double[] array = (double[]) arreglo;
+                        int maxRepeticion = 0;
+                        double moda = 0;
+                        for (int i=0; i < array.length; i++) {
+                            int numRepeticiones = 0;
+                            for (int j=0; j<array.length; j++) {
+                                if(array[i] == array[j]) {
+                                    numRepeticiones++;
+                                }
+                                if (numRepeticiones>maxRepeticion) {    
+                                    moda = array[i];
+                                    maxRepeticion = numRepeticiones;
+                                }
+                            }
+                        }
+                        RESULT = moda;
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("funcion_estadistica",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -715,7 +732,22 @@ class CUP$Parser$actions {
 		int arregloleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int arregloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object arreglo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		
+                        double[] array = (double[]) arreglo;
+                        double media = 0;
+                        for (int i=0; i < array.length; i++) {
+                            media += array[i];
+                        }
+                        media = media / array.length;
 
+                        double sumaCuadrados = 0;
+                        double varianza = 0;
+                        for (double num : array){
+                            sumaCuadrados += Math.pow(num - media, 2);
+                        }
+                        varianza = sumaCuadrados / array.length;
+                        RESULT = varianza;
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("funcion_estadistica",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -727,7 +759,16 @@ class CUP$Parser$actions {
 		int arregloleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int arregloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object arreglo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-
+		
+                        double[] array = (double[]) arreglo;
+                        double max = 0;
+                        for (int i = 0; i<array.length; i++) {
+                            if (array[i] > max) {
+                                max = array[i];
+                            }
+                        }
+                        RESULT = max;
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("funcion_estadistica",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -739,7 +780,19 @@ class CUP$Parser$actions {
 		int arregloleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int arregloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object arreglo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-
+		
+                        double[] array = (double[]) arreglo;
+                        double min = 0;
+                        for (int i = 0; i<array.length; i++) {
+                            if (min == 0){
+                                min = array[i];
+                            }
+                            else if (array[i] < min) {
+                                min = array[i];
+                            }
+                        }
+                        RESULT = min;
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("funcion_estadistica",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
