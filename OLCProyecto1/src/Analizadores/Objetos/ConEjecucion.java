@@ -17,6 +17,7 @@ public class ConEjecucion {
     public static HashMap<String, Variable> variables = new HashMap<>();
     public static HashMap<String, double[]> arrays = new HashMap<>();
     public static HashMap<String, String[]> arrayChar = new HashMap<>();
+    public static HashMap<String, Object> atributesGraph = new HashMap<>();
     public static ArrayList<Errores> errores = new ArrayList<>();
     
     public static void imprimirVariables() {

@@ -40,13 +40,21 @@ PROGRAM
     console::column = cadena -> @medium end;
 
     graphBar(
-    titulo::char[] = "HOLA" end;
-    ejeX::char[] = ["12", "2", "32"]  end;
-    ejeY::double = [1, 2, 4, 5, 4, 1]  end;
-    tituloX::char[] = "NOMBRE" end;
-    tituloY::char[] = "CADACUANTO" end;
+    titulo::char[] = "ESTUDIANTES" end;
+    ejeX::char[] = ["1 Parcial", "2 Parcial", "3 Parcial", "Final"]  end;
+    ejeY::double = [60,50,90, 60]  end;
+    tituloX::char[] = "Actividades" end;
+    tituloY::char[] = "Notas" end;
     EXEC graphBar end;
     ) end;
+
+    graphPie(
+    label::char[] = ["Uno", "Dos", "Tres"] end;
+    values::double = [50, 30, 20] end;
+    titulo::char[] = "Ejemplo Gráfica de Pie" end;
+    EXEC grapHPie end;
+    ) end;
+
 
 END PROGRAM
 

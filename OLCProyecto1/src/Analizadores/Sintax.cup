@@ -6,6 +6,15 @@ import Analizadores.Objetos.Errores;
 import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import java.io.File;
+import java.io.IOException;
 
 parser code 
 {:
@@ -27,7 +36,7 @@ terminal GBAR, GPIE, GLINE, GHISTOGRAM, TITULO, EJEX, EJEY, TITULOX, TITULOY, VA
 non terminal inicio, declaracion_variable, declaraciones, sentencia, valor, declaracion_array, lista_valoresDouble, operacion_arit;
 non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica;
 non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn, variable, lista_valores, arreglo_char;
-non terminal declaracion_grafico, sentencia_grafico;
+non terminal declaracion_grafico, sentencia_grafico, atributosGraph;
 
 //Estructura principal del programa
 
@@ -386,14 +395,30 @@ variable ::= IDENTIFICADOR:id   {:
 ;
 
 declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
+                    | GPIE OPENPAREN sentencia_grafico EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
+                    | GLINE OPENPAREN sentencia_grafico EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
 ;
 
-sentencia_grafico ::= TITULO DOS_PUNTOS CHAR IGUAL valor:titulo END PUNTO_Y_COMA
-                    EJEX DOS_PUNTOS CHAR IGUAL arreglo_char:ejex END PUNTO_Y_COMA
-                    EJEY DOS_PUNTOS DOUBLE IGUAL arreglo_double:ejey END PUNTO_Y_COMA
-                    TITULOX DOS_PUNTOS CHAR IGUAL valor:titulox END PUNTO_Y_COMA
-                    TITULOY DOS_PUNTOS CHAR IGUAL valor:tituloy END PUNTO_Y_COMA {:
-                        System.out.println("INGRESO A GRAFICO BARRA");
-                    :}
+sentencia_grafico ::= sentencia_grafico atributosGraph
+                    | atributosGraph
 ;
-        
+
+atributosGraph ::= TITULO DOS_PUNTOS CHAR IGUAL valor:titulo END PUNTO_Y_COMA
+                {: ConEjecucion.atributesGraph.put("Titulo",titulo.toString());  :}
+                | EJEX DOS_PUNTOS CHAR IGUAL arreglo_char:ejex END PUNTO_Y_COMA
+                {: String[] array = (String[]) ejex;
+                    ConEjecucion.atributesGraph.put("ejex",array); :}
+                | EJEY DOS_PUNTOS DOUBLE IGUAL arreglo_double:ejey END PUNTO_Y_COMA
+                {: double[] array = (double[]) ejey;
+                    ConEjecucion.atributesGraph.put("ejey",array);  :}
+                | TITULOX DOS_PUNTOS CHAR IGUAL valor:titulox END PUNTO_Y_COMA
+                {: ConEjecucion.atributesGraph.put("Titulox",titulox.toString());  :}
+                | TITULOY DOS_PUNTOS CHAR IGUAL valor:tituloy END PUNTO_Y_COMA
+                {: ConEjecucion.atributesGraph.put("Tituloy",tituloy.toString());  :}
+                | LABEL DOS_PUNTOS CHAR IGUAL arreglo_char:labels END PUNTO_Y_COMA
+                {: String[] array = (String[]) labels;
+                    ConEjecucion.atributesGraph.put("labels",array); :}
+                | VALUES DOS_PUNTOS DOUBLE IGUAL arreglo_double:values END PUNTO_Y_COMA
+                {: double[] array = (double[]) values;
+                    ConEjecucion.atributesGraph.put("values",array);  :}
+;
