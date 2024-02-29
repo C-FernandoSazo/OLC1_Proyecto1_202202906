@@ -12,17 +12,25 @@ public class sym {
   public static final int MULT = 29;
   public static final int CHAR = 11;
   public static final int PUNTO_Y_COMA = 7;
+  public static final int GLINE = 40;
   public static final int DOUBLE = 10;
   public static final int RESTA = 28;
   public static final int DOS_PUNTOS = 9;
   public static final int CLOSEPAREN = 22;
+  public static final int TITULOY = 46;
+  public static final int TITULOX = 45;
+  public static final int EJEY = 44;
   public static final int IDENTIFICADOR = 2;
+  public static final int EJEX = 43;
   public static final int IGUAL = 23;
   public static final int OPENPAREN = 21;
+  public static final int GPIE = 39;
   public static final int COLUMN = 26;
   public static final int ARROBA = 17;
+  public static final int TITULO = 42;
   public static final int DIV = 30;
   public static final int SUMA = 27;
+  public static final int GBAR = 38;
   public static final int MIN = 37;
   public static final int MEDIANA = 33;
   public static final int EOF = 0;
@@ -31,10 +39,12 @@ public class sym {
   public static final int PROGRAM = 12;
   public static final int COMA = 16;
   public static final int CADENA = 4;
+  public static final int VALUES = 47;
   public static final int MODA = 34;
   public static final int MOD = 31;
   public static final int ASIGNACION = 14;
   public static final int PUNTOS = 8;
+  public static final int GHISTOGRAM = 41;
   public static final int ACCESO = 15;
   public static final int VARIANZA = 35;
   public static final int END = 13;
@@ -42,6 +52,8 @@ public class sym {
   public static final int MEDIA = 32;
   public static final int CLOSECORCHETE = 20;
   public static final int OPENCORCHETE = 19;
+  public static final int EXEC = 49;
+  public static final int LABEL = 48;
   public static final int MAX = 36;
   public static final int VAR = 6;
   public static final int PRINT = 25;
@@ -84,7 +96,19 @@ public class sym {
   "MODA",
   "VARIANZA",
   "MAX",
-  "MIN"
+  "MIN",
+  "GBAR",
+  "GPIE",
+  "GLINE",
+  "GHISTOGRAM",
+  "TITULO",
+  "EJEX",
+  "EJEY",
+  "TITULOX",
+  "TITULOY",
+  "VALUES",
+  "LABEL",
+  "EXEC"
   };
 }
 

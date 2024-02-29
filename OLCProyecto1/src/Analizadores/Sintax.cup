@@ -22,10 +22,12 @@ terminal IDENTIFICADOR, NUMERO, CADENA, DECIMAL;
 terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION, ACCESO;
 terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT, COLUMN;
 terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
+terminal GBAR, GPIE, GLINE, GHISTOGRAM, TITULO, EJEX, EJEY, TITULOX, TITULOY, VALUES, LABEL, EXEC;
 
 non terminal inicio, declaracion_variable, declaraciones, sentencia, valor, declaracion_array, lista_valoresDouble, operacion_arit;
 non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica;
-non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn, variable, lista_valores;
+non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn, variable, lista_valores, arreglo_char;
+non terminal declaracion_grafico, sentencia_grafico;
 
 //Estructura principal del programa
 
@@ -45,6 +47,7 @@ sentencia ::= declaracion_variable
                 | sentencia_print
                 | declaracion_array
                 | sentencia_column
+                | declaracion_grafico
 ;
 
 declaracion_variable ::= VAR PUNTOS DOUBLE DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor_double:v END PUNTO_Y_COMA
@@ -59,7 +62,8 @@ declaracion_variable ::= VAR PUNTOS DOUBLE DOS_PUNTOS IDENTIFICADOR:id ASIGNACIO
                 :}
 ;
 
-declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE END PUNTO_Y_COMA
+declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
+                        lista_valoresDouble:lista CLOSECORCHETE END PUNTO_Y_COMA
                 {:
                     // Casting seguro a ArrayList<Double>
                     ArrayList<Double> listaActual;
@@ -75,7 +79,8 @@ declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGN
                     }
                     ConEjecucion.arrays.put(id.toString(), array);
                 :}
-    | ARR PUNTOS CHAR DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE lista_valoresChar:lista CLOSECORCHETE END PUNTO_Y_COMA
+    | ARR PUNTOS CHAR DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
+        lista_valoresChar:lista CLOSECORCHETE END PUNTO_Y_COMA
                 {:
                     ArrayList<String> listaActual;
                     if (lista instanceof ArrayList) {
@@ -320,6 +325,30 @@ arreglo_double ::= OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE {:
                  :}
 ;
 
+arreglo_char ::= OPENCORCHETE lista_valoresChar:lista CLOSECORCHETE {:
+                    ArrayList<String> listaActual;
+                    if (lista instanceof ArrayList) {
+                        listaActual = (ArrayList<String>) lista;
+                    } else {
+                        // Manejo de error o inicialización alternativa
+                        listaActual = new ArrayList<String>();
+                    }
+                    String[] array = new String[listaActual.size()];
+                    for (int i = 0; i < listaActual.size(); i++) {
+                        array[i] = listaActual.get(i);
+                    }
+                    RESULT = array;                
+                :}
+                 | ARROBA IDENTIFICADOR:id  {:
+                    String[] array = ConEjecucion.arrayChar.get(id.toString());
+                    if (array != null) {
+                        RESULT = array;
+                    } else {
+                            throw new Exception("Array no definido: " + id.toString());
+                        }
+                 :}
+;
+
 valor ::= |valor_double:n {:
                     RESULT = Double.valueOf(n.toString()); 
                     :}
@@ -355,3 +384,16 @@ variable ::= IDENTIFICADOR:id   {:
                 }
             :}
 ;
+
+declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
+;
+
+sentencia_grafico ::= TITULO DOS_PUNTOS CHAR IGUAL valor:titulo END PUNTO_Y_COMA
+                    EJEX DOS_PUNTOS CHAR IGUAL arreglo_char:ejex END PUNTO_Y_COMA
+                    EJEY DOS_PUNTOS DOUBLE IGUAL arreglo_double:ejey END PUNTO_Y_COMA
+                    TITULOX DOS_PUNTOS CHAR IGUAL valor:titulox END PUNTO_Y_COMA
+                    TITULOY DOS_PUNTOS CHAR IGUAL valor:tituloy END PUNTO_Y_COMA {:
+                        System.out.println("INGRESO A GRAFICO BARRA");
+                    :}
+;
+        

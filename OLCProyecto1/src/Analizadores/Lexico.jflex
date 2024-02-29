@@ -178,6 +178,54 @@ COMENTARIO = "!"[^\n]* "\n"
     tokens.add(new Token("COLUMN", yyline, yycolumn, yytext()));
     return new Symbol(sym.COLUMN, yyline, yycolumn, yytext());
 }
+"graphbar"    {
+    tokens.add(new Token("GBAR", yyline, yycolumn, yytext()));
+    return new Symbol(sym.GBAR, yyline, yycolumn, yytext());
+}
+"graphpie"    {
+    tokens.add(new Token("GPIE", yyline, yycolumn, yytext()));
+    return new Symbol(sym.GPIE, yyline, yycolumn, yytext());
+}
+"graphline"    {
+    tokens.add(new Token("GLINE", yyline, yycolumn, yytext()));
+    return new Symbol(sym.GLINE, yyline, yycolumn, yytext());
+}
+"histogram"    {
+    tokens.add(new Token("GHISTOGRAM", yyline, yycolumn, yytext()));
+    return new Symbol(sym.GHISTOGRAM, yyline, yycolumn, yytext());
+}
+"titulo"    {
+    tokens.add(new Token("TITULO", yyline, yycolumn, yytext()));
+    return new Symbol(sym.TITULO, yyline, yycolumn, yytext());
+}
+"ejex"    {
+    tokens.add(new Token("EJEX", yyline, yycolumn, yytext()));
+    return new Symbol(sym.EJEX, yyline, yycolumn, yytext());
+}
+"ejey"    {
+    tokens.add(new Token("EJEY", yyline, yycolumn, yytext()));
+    return new Symbol(sym.EJEY, yyline, yycolumn, yytext());
+}
+"titulox"    {
+    tokens.add(new Token("TITULOX", yyline, yycolumn, yytext()));
+    return new Symbol(sym.TITULOX, yyline, yycolumn, yytext());
+}
+"tituloy"    {
+    tokens.add(new Token("TITULOY", yyline, yycolumn, yytext()));
+    return new Symbol(sym.TITULOY, yyline, yycolumn, yytext());
+}
+"values"    {
+    tokens.add(new Token("VALUES", yyline, yycolumn, yytext()));
+    return new Symbol(sym.VALUES, yyline, yycolumn, yytext());
+}
+"label"    {
+    tokens.add(new Token("LABEL", yyline, yycolumn, yytext()));
+    return new Symbol(sym.LABEL, yyline, yycolumn, yytext());
+}
+"exec"    {
+    tokens.add(new Token("EXEC", yyline, yycolumn, yytext()));
+    return new Symbol(sym.EXEC, yyline, yycolumn, yytext());
+}
 {CADENA}        {
     tokens.add(new Token("CADENA", yyline, yycolumn, yytext()));
     return new Symbol(sym.CADENA, yyline, yycolumn, yytext());

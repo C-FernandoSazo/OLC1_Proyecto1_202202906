@@ -39,5 +39,14 @@ PROGRAM
     console::column = cadena -> @carray end;
     console::column = cadena -> @medium end;
 
+    graphBar(
+    titulo::char[] = "HOLA" end;
+    ejeX::char[] = ["12", "2", "32"]  end;
+    ejeY::double = [1, 2, 4, 5, 4, 1]  end;
+    tituloX::char[] = "NOMBRE" end;
+    tituloY::char[] = "CADACUANTO" end;
+    EXEC graphBar end;
+    ) end;
+
 END PROGRAM
 
