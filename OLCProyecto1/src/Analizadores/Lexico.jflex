@@ -41,8 +41,8 @@ COMENTARIO = "!"[^\n]* "\n"
 "<!" { yybegin(ML_COMMENT); }
 
 <ML_COMMENT> {
-    "!>" { yybegin(YYINITIAL); } // Fin del comentario, regresar al estado inicial.
-    . { } // Ignora cualquier carácter.
+    "!>" { yybegin(YYINITIAL); }
+    [^\n] { } // Ignora cualquier carácter excepto el salto de línea.
     "\n" { yyline++; } // Cuenta los saltos de línea.
 }
 
@@ -108,7 +108,6 @@ COMENTARIO = "!"[^\n]* "\n"
 }
 "["      {
     tokens.add(new Token("OPENCORCHETE", yyline, yycolumn, yytext()));
-    System.out.println("SE DETECTO CORCHETE");
     return new Symbol(sym.OPENCORCHETE, yyline, yycolumn, yytext());
 }
 "]"      {

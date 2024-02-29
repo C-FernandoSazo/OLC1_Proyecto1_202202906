@@ -3,6 +3,7 @@ import java_cup.runtime.*;
 import java.util.HashMap;
 import Analizadores.Objetos.ConEjecucion;
 import Analizadores.Objetos.Errores;
+import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,8 +24,8 @@ terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, 
 terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
 
 non terminal inicio, declaracion_variable, declaraciones, sentencia, valor, declaracion_array, lista_valoresDouble, operacion_arit;
-non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica, valor_print;
-non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn;
+non terminal arreglo_double, valor_double, valor_string, sentencia_print, lista_expresiones, funcion_estadistica;
+non terminal lista_valoresChar, sentencia_column, lista_expresionesColumn, variable, lista_valores;
 
 //Estructura principal del programa
 
@@ -43,13 +44,19 @@ declaraciones ::= declaraciones sentencia
 sentencia ::= declaracion_variable
                 | sentencia_print
                 | declaracion_array
+                | sentencia_column
 ;
 
 declaracion_variable ::= VAR PUNTOS DOUBLE DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor_double:v END PUNTO_Y_COMA
-                {: ConEjecucion.variablesDouble.put(id.toString(), Double.valueOf(v.toString())); :}   
-    
+                {: 
+                    Variable var = new Variable("double",Double.valueOf(v.toString()));
+                    ConEjecucion.variables.put(id.toString(), var); 
+                :}   
                 | VAR PUNTOS CHAR DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor_string:v END PUNTO_Y_COMA
-                     {: ConEjecucion.variablesChar.put(id.toString(), v.toString()); :} 
+               {: 
+                    Variable var = new Variable("string",v.toString());
+                    ConEjecucion.variables.put(id.toString(), var); 
+                :}
 ;
 
 declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE END PUNTO_Y_COMA
@@ -85,12 +92,24 @@ declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGN
                 :}
 ;
 
-lista_valoresDouble ::= lista_valoresDouble:lista COMA valor_double:var {:
+lista_valores ::= lista_valores:lista COMA valor:var {:
+                    ArrayList<Object> listaActual = (ArrayList<Object>) lista;
+                    listaActual.add(var);
+                    RESULT = listaActual;
+                :}
+                | valor:var {:
+                    ArrayList<Object> nuevaLista = new ArrayList<Object>();
+                    nuevaLista.add(var);
+                    RESULT = nuevaLista;
+                :}
+;
+
+lista_valoresDouble ::= lista_valoresDouble:lista COMA valor:var {:
                     ArrayList<Double> listaActual = (ArrayList<Double>) lista;
                     listaActual.add((Double) var); 
                     RESULT = listaActual; 
                 :}
-                | valor_double:var 
+                | valor:var 
                 {:
                     ArrayList<Double> nuevaLista = new ArrayList<Double>();
                     nuevaLista.add((Double) var);
@@ -98,12 +117,12 @@ lista_valoresDouble ::= lista_valoresDouble:lista COMA valor_double:var {:
                 :}
 ;
 
-lista_valoresChar ::= lista_valoresChar:lista COMA valor_string:var {:
+lista_valoresChar ::= lista_valoresChar:lista COMA valor:var {:
                     ArrayList<String> listaActual = (ArrayList<String>) lista;
                     listaActual.add((String) var); 
                     RESULT = listaActual; 
                 :}
-                | valor_string:var 
+                | valor:var 
                 {:
                     ArrayList<String> nuevaLista = new ArrayList<String>();
                     nuevaLista.add((String) var);
@@ -116,38 +135,76 @@ sentencia_print ::= CONSOLE DOS_PUNTOS PRINT IGUAL lista_expresiones:text END PU
                 :}
 ;
 
-lista_expresiones ::= lista_expresiones:text1 COMA valor_print:text2 {:
+lista_expresiones ::= lista_expresiones:text1 COMA valor:text2 {:
                         RESULT = text1.toString() + ", " + text2.toString();
                         :}
-                    | valor_print:text   {: RESULT = text.toString(); :}
+                    | valor:text   {: RESULT = text.toString(); :}
 ;
 
-sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor_string ACCESO lista_expresionesColumn END PUNTO_Y_COMA
+sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor:var ACCESO lista_expresionesColumn:arreglo END PUNTO_Y_COMA  {:
+                            System.out.println("----------");
+                            System.out.println(var.toString());
+                            System.out.println("----------");
+                            if (arreglo instanceof double[]){
+                                double[] temp = (double[]) arreglo;
+                                for(double elemento : temp) {
+                                    System.out.println(elemento);
+                                }                                 
+                            } else{ 
+                                Object[] array = (Object[]) arreglo;
+                                for(Object elemento : array) {
+                                    System.out.println(elemento);
+                                } 
+                            }  
+                        :}
+;
 
 
-lista_expresionesColumn ::= arreglo_double
+lista_expresionesColumn ::= ARROBA IDENTIFICADOR:id     {:
+                            double[] nums = ConEjecucion.arrays.get(id.toString());
+                            String [] text = ConEjecucion.arrayChar.get(id.toString());
+                            if(nums != null){
+                                RESULT = nums;
+                            } else if(text != null) {
+                                RESULT = text;
+                            }
+                        :}
+                        | OPENCORCHETE lista_valores:lista CLOSECORCHETE {:
+                            ArrayList<Object> listaActual;
+                            if (lista instanceof ArrayList) {
+                                listaActual = (ArrayList<Object>) lista;
+                            } else {
+                                // Manejo de error o inicialización alternativa
+                                listaActual = new ArrayList<Object>();
+                            }
+                            Object[] array = new Object[listaActual.size()];
+                            for (int i = 0; i < listaActual.size(); i++) {
+                                array[i] = listaActual.get(i);
+                            }
+                            RESULT = array;                
+                        :}
+;
 
 operacion_arit ::=
-      SUMA OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+      SUMA OPENPAREN valor:num1 COMA valor:num2 CLOSEPAREN 
       {: 
-          RESULT = new Double(((Double)num1).doubleValue() + ((Double)num2).doubleValue()); 
+          RESULT = Double.valueOf(((Double)num1).doubleValue() + ((Double)num2).doubleValue()); 
       :}
-    | RESTA OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+    | RESTA OPENPAREN valor:num1 COMA valor:num2 CLOSEPAREN 
       {: 
-          RESULT = new Double(((Double)num1).doubleValue() - ((Double)num2).doubleValue()); 
+          RESULT = Double.valueOf(((Double)num1).doubleValue() - ((Double)num2).doubleValue()); 
       :}
-    | MULT OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+    | MULT OPENPAREN valor:num1 COMA valor:num2 CLOSEPAREN 
       {: 
-          RESULT = new Double(((Double)num1).doubleValue() * ((Double)num2).doubleValue()); 
+          RESULT = Double.valueOf(((Double)num1).doubleValue() * ((Double)num2).doubleValue());
       :}
-    | DIV OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+    | DIV OPENPAREN valor:num1 COMA valor:num2 CLOSEPAREN 
       {: 
-          // Asegúrate de manejar la división por cero aquí.
-          RESULT = new Double(((Double)num1).doubleValue() / ((Double)num2).doubleValue()); 
+          RESULT = Double.valueOf(((Double)num1).doubleValue() / ((Double)num2).doubleValue()); 
       :}
-    | MOD OPENPAREN valor_double:num1 COMA valor_double:num2 CLOSEPAREN 
+    | MOD OPENPAREN valor:num1 COMA valor:num2 CLOSEPAREN 
       {: 
-          RESULT = new Double(((Double)num1).doubleValue() % ((Double)num2).doubleValue()); 
+          RESULT = Double.valueOf(((Double)num1).doubleValue() % ((Double)num2).doubleValue()); 
       :}
 ;
 
@@ -263,60 +320,15 @@ arreglo_double ::= OPENCORCHETE lista_valoresDouble:lista CLOSECORCHETE {:
                  :}
 ;
 
-arreglo_char ::= OPENCORCHETE lista_valoresChar:lista CLOSECORCHETE {:
-                    ArrayList<String> listaActual;
-                    if (lista instanceof ArrayList) {
-                        listaActual = (ArrayList<String>) lista;
-                    } else {
-                        // Manejo de error o inicialización alternativa
-                        listaActual = new ArrayList<String>();
-                    }
-                    String[] array = new String[listaActual.size()];
-                    for (int i = 0; i < listaActual.size(); i++) {
-                        array[i] = listaActual.get(i);
-                    }
-                    RESULT = array;
-                :}
-                | ARROBA IDENTIFICADOR:id  {:
-                    String[] array = ConEjecucion.arrayChar.get(id.toString());
-                    if (array != null) {
-                        RESULT = array;
-                    } else {
-                            throw new Exception("Array no definido: " + id.toString());
-                        }
-                :}
-
 valor ::= |valor_double:n {:
                     RESULT = Double.valueOf(n.toString()); 
                     :}
         | valor_string:c  {:
                     RESULT = c.toString();
                     :}
-
-;
-
-valor_print ::= NUMERO:n   {: 
-                    RESULT = Double.valueOf(n.toString()); 
-                :}
-                | DECIMAL:d  {:
-                    RESULT = Double.valueOf(d.toString());
-                :}
-                | CADENA:c   {:
-                    RESULT = c.toString();
+        | variable:var  {:
+                    RESULT = var;
                     :}
-                | IDENTIFICADOR:id  {:
-                    Double num = ConEjecucion.variablesDouble.get(id.toString());
-                    String str = ConEjecucion.variablesChar.get(id.toString());
-                    if (str == null && num == null) {
-                        // Manejo de error: variable no definida.
-                        throw new Exception("Variable no definida: " + id.toString());
-                    } else if(num != null){
-                        RESULT = num;
-                        } else if(str != null){
-                            RESULT = str;
-                            }
-                    :}
-
 ;
 
 valor_double ::= NUMERO:n   {: 
@@ -327,18 +339,19 @@ valor_double ::= NUMERO:n   {:
                 :}
                 | operacion_arit:op {: RESULT = op; :}
                 | funcion_estadistica:est {: RESULT = est; :}
-                | IDENTIFICADOR:id  {:
-                    Double num = ConEjecucion.variablesDouble.get(id.toString());
-                    if (num == null) {
-                        // Manejo de error: variable no definida.
-                        throw new Exception("Variable no definida: " + id.toString());
-                    } else {
-                        RESULT = num;
-                        } 
-                    :}
 ;
 
 valor_string ::= CADENA:c   {:
                     RESULT = c.toString();
                     :}
+;
+
+variable ::= IDENTIFICADOR:id   {:
+                Variable var = ConEjecucion.variables.get(id.toString());
+                if (var != null) {
+                    RESULT = var.getValor();
+                } else {
+                    System.out.println("Variable no encontrada");
+                }
+            :}
 ;

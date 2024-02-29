@@ -14,18 +14,17 @@ import java.util.Map;
  */
 public class ConEjecucion {
     
-    public static HashMap<String, Double> variablesDouble = new HashMap<>();
-    public static HashMap<String, String> variablesChar = new HashMap<>();
+    public static HashMap<String, Variable> variables = new HashMap<>();
     public static HashMap<String, double[]> arrays = new HashMap<>();
     public static HashMap<String, String[]> arrayChar = new HashMap<>();
     public static ArrayList<Errores> errores = new ArrayList<>();
     
     public static void imprimirVariables() {
         System.out.println("Analizadores.ConEjecucion.imprimirVariables()");
-        for (Map.Entry<String, Double> entry : variablesDouble.entrySet()) {
+        for (Map.Entry<String, Variable> entry : variables.entrySet()) {
             String nombre = entry.getKey();
-            Double var = entry.getValue();
-            System.out.println("Nombre: " + nombre  + ", Valor: " + var);
+            Variable var = entry.getValue();
+            System.out.println("Nombre: " + nombre  + ", Valor: " + var.getValor());
         }
         for (Map.Entry<String, double[]> entry : arrays.entrySet()) {
             String nombre = entry.getKey();
