@@ -6,6 +6,7 @@ package Operaciones;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -13,6 +14,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 
 public class Graficar {
     
@@ -72,6 +76,56 @@ public class Graficar {
         }
     }
     
-    
-    
+        public static void grafica_histograma(String titulo, double[] datos)    {
+            HistogramDataset dataset = new HistogramDataset();
+            dataset.setType(HistogramType.FREQUENCY);
+            dataset.addSeries("Histogram", datos, datos.length);
+            JFreeChart histogram = ChartFactory.createHistogram(
+                    titulo, 
+                    "Valor", 
+                    "Frecuencia"
+                    , dataset, 
+                    PlotOrientation.VERTICAL, 
+                    true, 
+                    false
+                    , false);
+            try {
+            ChartUtilities.saveChartAsPNG(new File("Histograma.png"), histogram, 800, 600);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                
+            //Imprimir en Consola
+            Arrays.sort(datos);
+            int fb = 0, fa = 0;
+            double fr;
+            double total = datos.length;
+            double prevValue = -1;
+
+            System.out.println(titulo);
+            System.out.println("Valor\tFb\tFa\tFr");
+
+            for (double value : datos) {
+                if (value != prevValue) {
+                    if (fb > 0) {
+                        fa += fb;
+                        fr = (fb / total) * 100;
+                        System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                    }
+                    prevValue = value;
+                    fb = 1;
+                } else {
+                    fb++;
+                }
+            }
+            if (fb > 0) {
+                fa += fb;
+                fr = (fb / total) * 100;
+                System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+            }
+
+            System.out.println("Totales:\t" + (int) total + "\t" + (int) total + "\t100%");
+        
+    }
+      
 }

@@ -49,7 +49,7 @@ COMENTARIO = "!"[^\n]* "\n"
 // Tokens
 
 "var" {
-    tokens.add(new Token("VAR", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ID", yyline, yycolumn, yytext()));
     return new Symbol(sym.VAR, yyline, yycolumn, yytext());
 }
 "," {
@@ -90,11 +90,11 @@ COMENTARIO = "!"[^\n]* "\n"
     
 }
 "double"  {
-    tokens.add(new Token("DOUBLE", yyline, yycolumn, yytext()));
+    tokens.add(new Token("TIPO VAR", yyline, yycolumn, yytext()));
     return new Symbol(sym.DOUBLE, yyline, yycolumn, yytext());
 }
 "char[]"  {
-    tokens.add(new Token("CHAR", yyline, yycolumn, yytext()));
+    tokens.add(new Token("TIPO VAR", yyline, yycolumn, yytext()));
     System.out.println("LOGRADO CHAR");
     return new Symbol(sym.CHAR, yyline, yycolumn, yytext());
 }
@@ -103,7 +103,7 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.ARROBA, yyline, yycolumn, yytext());
 }
 "arr"    {
-    tokens.add(new Token("ARR", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ID", yyline, yycolumn, yytext()));
     return new Symbol(sym.ARR, yyline, yycolumn, yytext());
 }
 "["      {
@@ -139,31 +139,31 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.DIV, yyline, yycolumn, yytext());
 }
 "mod"    {
-    tokens.add(new Token("MOD", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MOD, yyline, yycolumn, yytext());
 }
 "media"    {
-    tokens.add(new Token("MEDIA", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIA, yyline, yycolumn, yytext());
 }
 "mediana"  {
-    tokens.add(new Token("MEDIANA", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIANA, yyline, yycolumn, yytext());
 }
 "moda"      {
-    tokens.add(new Token("MODA", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MODA, yyline, yycolumn, yytext());
 }
 "varianza"   {
-    tokens.add(new Token("VARIANZA", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.VARIANZA, yyline, yycolumn, yytext());
 }
 "max"        {
-    tokens.add(new Token("MAX", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MAX, yyline, yycolumn, yytext());
 }
 "min"        {
-    tokens.add(new Token("MIN", yyline, yycolumn, yytext()));
+    tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MIN, yyline, yycolumn, yytext());
 }
 "console"    {
@@ -227,19 +227,20 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.EXEC, yyline, yycolumn, yytext());
 }
 {CADENA}        {
-    tokens.add(new Token("CADENA", yyline, yycolumn, yytext()));
+    tokens.add(new Token("STRING", yyline, yycolumn, yytext()));
     return new Symbol(sym.CADENA, yyline, yycolumn, yytext());
 }
 {IDENTIFICADOR} {
-    tokens.add(new Token("IDENTIFICADOR", yyline, yycolumn, yytext()));
+    ConEjecucion.insVariables.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
+    tokens.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
     return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());
 }
 {NUMERO}       {
-    tokens.add(new Token("NUMERO", yyline, yycolumn, yytext()));
+    tokens.add(new Token("DOUBLE", yyline, yycolumn, yytext()));
     return new Symbol(sym.NUMERO, yyline, yycolumn, yytext());
 }
 {DECIMAL}      {
-    tokens.add(new Token("DECIMAL", yyline, yycolumn, yytext()));
+    tokens.add(new Token("DOUBLE", yyline, yycolumn, yytext()));
     return new Symbol(sym.DECIMAL, yyline, yycolumn, yytext());
 }
 

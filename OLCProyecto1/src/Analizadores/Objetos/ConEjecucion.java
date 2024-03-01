@@ -4,6 +4,8 @@
  */
 package Analizadores.Objetos;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class ConEjecucion {
     public static HashMap<String, String[]> arrayChar = new HashMap<>();
     public static HashMap<String, Object> atributesGraph = new HashMap<>();
     public static ArrayList<Errores> errores = new ArrayList<>();
+    public static ArrayList<Token> insVariables = new ArrayList<>();
     
     public static void imprimirVariables() {
         System.out.println("Analizadores.ConEjecucion.imprimirVariables()");
@@ -48,6 +51,84 @@ public class ConEjecucion {
             }
             System.out.println(); // Salto de línea después de imprimir todos los elementos de un arreglo
         }        
-    }    
-    
+    }
+
+    public static void generarHTML_TablaDeSimbolos() {
+        try {
+            FileWriter fileWriter = new FileWriter("tablaDeSimbolos.html");
+            try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
+                printWriter.println("<!DOCTYPE html>");
+                printWriter.println("<html>");
+                printWriter.println("<head><title>Tabla de Símbolos</title>");
+                // Estilos CSS
+                printWriter.println("<style>");
+                printWriter.println("body { display: flex; justify-content: center; align-items: center; flex-direction: column; }");
+                printWriter.println("table { width: 50%; border-collapse: collapse; }");
+                printWriter.println("th, td { padding: 8px; text-align: left; }");
+                printWriter.println("th#numero { width: 10%; }"); 
+                printWriter.println("</style>");
+                printWriter.println("</head>");
+                printWriter.println("<body>");
+                printWriter.println("<h1>Tabla de Simbolos</h1>");
+                printWriter.println("<table border=\"1\">");
+                printWriter.println("<tr><th>Nombre</th><th>Tipo</th><th>Valor</th><th>Columna</th><th>Fila</th></tr>");
+
+                // Imprimir variables
+                for (String key : variables.keySet()) {
+                    Variable var = variables.get(key);
+                    Token tokenInfo = findTokenInfo(key);
+                    if (var.getTipo().equals("double")){
+                    printWriter.println("<tr><td>" + key + "</td><td>Double</td><td>" + var.getValor() + "</td><td>" + tokenInfo.getColumna() + "</td><td>" + tokenInfo.getLinea() + "</td></tr>");
+                    } else if(var.getTipo().equals("string")) {
+                        printWriter.println("<tr><td>" + key + "</td><td>String</td><td>" + var.getValor() + "</td><td>" + tokenInfo.getColumna() + "</td><td>" + tokenInfo.getLinea() + "</td></tr>");
+                    }
+                }
+
+                // Imprimir arrays
+                for (String key : arrays.keySet()) {
+                    Token tokenInfo = findTokenInfo(key);
+                    printWriter.println("<tr><td>" + key + "</td><td>Array de double</td><td>" + arrayToString(arrays.get(key)) + "</td><td>" + tokenInfo.getColumna() + "</td><td>" + tokenInfo.getLinea() + "</td></tr>");
+                }
+
+                // Imprimir arrayChar
+                for (String key : arrayChar.keySet()) {
+                    Token tokenInfo = findTokenInfo(key);
+                    printWriter.println("<tr><td>" + key + "</td><td>Array de String</td><td>" + arrayToString(arrayChar.get(key)) + "</td><td>" + tokenInfo.getColumna() + "</td><td>" + tokenInfo.getLinea() + "</td></tr>");
+                }
+
+                printWriter.println("</table>");
+                printWriter.println("</body>");
+                printWriter.println("</html>");
+
+                System.out.println("ARCHIVO HTML DE TABLA DE SÍMBOLOS GENERADO CON ÉXITO");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+        private static Token findTokenInfo(String key) {
+        // Este método busca en insVariables por el token con el nombre 'key' y devuelve su información
+        for (Token token : insVariables) {
+            if (token.getValor().equals(key)) {
+                return token;
+            }
+        }
+        return new Token("NULL",0,0,"NULL");
+    }
+        
+    private static String arrayToString(double[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (double val : arr) {
+            sb.append(val).append(", ");
+        }
+        return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "";
+    }
+
+    private static String arrayToString(String[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (String val : arr) {
+            sb.append(val).append(", ");
+        }
+        return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "";
+    }
 }

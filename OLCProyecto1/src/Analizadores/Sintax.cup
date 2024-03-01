@@ -1,14 +1,11 @@
 package Analizadores;
 import java_cup.runtime.*;
-import java.util.HashMap;
 import Analizadores.Objetos.ConEjecucion;
 import Analizadores.Objetos.Errores;
 import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import Operaciones.Graficar;
-import java.io.File;
-import java.io.IOException;
+import Operaciones.Estadistica;
 
 parser code 
 {:
@@ -220,86 +217,37 @@ operacion_arit ::=
 funcion_estadistica ::= MEDIA OPENPAREN arreglo_double:arreglo CLOSEPAREN 
                     {:
                         double[] array = (double[]) arreglo;
-                        double media = 0;
-                        for (int i=0; i < array.length; i++) {
-                            media += array[i];
-                        }
-                        media = media / array.length;
+                        double media = Estadistica.media(array);
                         RESULT = media;
                     :}
                  | MEDIANA OPENPAREN arreglo_double:arreglo CLOSEPAREN
                     {:
                         double[] array = (double[]) arreglo;
-                        Arrays.sort(array);
-                        int n = array.length;
-                        double mediana;
-                        if (n % 2 != 0) {
-                            mediana =  array[n/2];
-                            RESULT = mediana;
-                        } else {
-                                mediana = (array[(n/2)-1] + array[n/2]) / 2;
-                                RESULT = mediana;
-                            }
+                        double mediana = Estadistica.mediana(array);
+                        RESULT = mediana;
                     :}
                  | MODA OPENPAREN arreglo_double:arreglo CLOSEPAREN
                     {:
                         double[] array = (double[]) arreglo;
-                        int maxRepeticion = 0;
-                        double moda = 0;
-                        for (int i=0; i < array.length; i++) {
-                            int numRepeticiones = 0;
-                            for (int j=0; j<array.length; j++) {
-                                if(array[i] == array[j]) {
-                                    numRepeticiones++;
-                                }
-                                if (numRepeticiones>maxRepeticion) {    
-                                    moda = array[i];
-                                    maxRepeticion = numRepeticiones;
-                                }
-                            }
-                        }
+                        double moda = Estadistica.moda(array);
                         RESULT = moda;
                     :}
                  | VARIANZA OPENPAREN arreglo_double:arreglo CLOSEPAREN
                     {:
                         double[] array = (double[]) arreglo;
-                        double media = 0;
-                        for (int i=0; i < array.length; i++) {
-                            media += array[i];
-                        }
-                        media = media / array.length;
-
-                        double sumaCuadrados = 0;
-                        double varianza = 0;
-                        for (double num : array){
-                            sumaCuadrados += Math.pow(num - media, 2);
-                        }
-                        varianza = sumaCuadrados / array.length;
+                        double varianza = Estadistica.varianza(array);
                         RESULT = varianza;
                     :}
                  | MAX OPENPAREN arreglo_double:arreglo CLOSEPAREN
                     {:
                         double[] array = (double[]) arreglo;
-                        double max = 0;
-                        for (int i = 0; i<array.length; i++) {
-                            if (array[i] > max) {
-                                max = array[i];
-                            }
-                        }
+                        double max = Estadistica.max(array);
                         RESULT = max;
                     :}
                  | MIN OPENPAREN arreglo_double:arreglo CLOSEPAREN
                     {:
                         double[] array = (double[]) arreglo;
-                        double min = 0;
-                        for (int i = 0; i<array.length; i++) {
-                            if (min == 0){
-                                min = array[i];
-                            }
-                            else if (array[i] < min) {
-                                min = array[i];
-                            }
-                        }
+                        double min = Estadistica.min(array);
                         RESULT = min;
                     :}
                  ;
@@ -413,6 +361,7 @@ declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_C
                     | GHISTOGRAM OPENPAREN sentencia_grafico EXEC GHISTOGRAM END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
                         String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();   
                         double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
+                        Graficar.grafica_histograma(titulo, values);
                     :}
 ;
 

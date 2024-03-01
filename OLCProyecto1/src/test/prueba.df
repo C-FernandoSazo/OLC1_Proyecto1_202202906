@@ -38,7 +38,8 @@ PROGRAM
     console::column = "enteros" -> [1,2,3] end;
     console::column = cadena -> @carray end;
     console::column = cadena -> @medium end;
-
+    
+    arr:double:: @datos <- [2,2,2,5,5,7,8] end;
     graphBar(
     titulo::char[] = "ESTUDIANTES" end;
     ejeX::char[] = ["1 Parcial", "2 Parcial", "3 Parcial", "Final"]  end;
@@ -62,6 +63,12 @@ PROGRAM
     tituloX::char[] = "Actividades" end;
     tituloY::char[] = "Notas" end;
     EXEC graphLine end;
+    ) end;
+
+    Histogram(
+    titulo::char[] = "Analisis de Arreglo" end;
+    values::double = @datos end;
+    EXEC Histogram end;
     ) end;
 
 END PROGRAM
