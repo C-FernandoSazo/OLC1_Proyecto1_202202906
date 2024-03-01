@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class test {
    public static void main(String[] args) {
         try {
-            FileReader fileReader = new FileReader("C:/Users/Fernando/OneDrive/Documentos/Programas/OLC1_Proyecto1_202202906/OLCProyecto1/src/test/prueba.df");
+            FileReader fileReader = new FileReader("C:/Users/Cesar/Documents/Programas/2024/OLC1_Proyecto1_202202906/OLCProyecto1/src/test/prueba.df");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             Scanner scanner = new Scanner(bufferedReader);         
             Parser parser = new Parser(scanner);
