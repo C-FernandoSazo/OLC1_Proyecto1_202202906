@@ -6,13 +6,7 @@ import Analizadores.Objetos.Errores;
 import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import Operaciones.Graficar;
 import java.io.File;
 import java.io.IOException;
 
@@ -394,9 +388,32 @@ variable ::= IDENTIFICADOR:id   {:
             :}
 ;
 
-declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
-                    | GPIE OPENPAREN sentencia_grafico EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
-                    | GLINE OPENPAREN sentencia_grafico EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA
+declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
+                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
+                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        Graficar.grafica_barras(titulo, ejex, ejey, titulox, tituloy);
+                    :}
+                    | GPIE OPENPAREN sentencia_grafico EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
+                        String [] labels = (String[]) ConEjecucion.atributesGraph.get("labels");
+                        Graficar.graficar_pie(titulo, values, labels);
+                    :}
+                    | GLINE OPENPAREN sentencia_grafico EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
+                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
+                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        Graficar.grafica_linea(titulo, ejex, ejey, titulox, tituloy);
+                    :}
+                    | GHISTOGRAM OPENPAREN sentencia_grafico EXEC GHISTOGRAM END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();   
+                        double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
+                    :}
 ;
 
 sentencia_grafico ::= sentencia_grafico atributosGraph

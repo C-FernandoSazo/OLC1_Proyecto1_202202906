@@ -12,13 +12,7 @@ import Analizadores.Objetos.Errores;
 import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import Operaciones.Graficar;
 import java.io.File;
 import java.io.IOException;
 import java_cup.runtime.XMLElement;
@@ -1334,7 +1328,14 @@ class CUP$Parser$actions {
           case 50: // declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA 
             {
               Object RESULT =null;
-
+		
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
+                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
+                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        Graficar.grafica_barras(titulo, ejex, ejey, titulox, tituloy);
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1343,7 +1344,12 @@ class CUP$Parser$actions {
           case 51: // declaracion_grafico ::= GPIE OPENPAREN sentencia_grafico EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA 
             {
               Object RESULT =null;
-
+		
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
+                        String [] labels = (String[]) ConEjecucion.atributesGraph.get("labels");
+                        Graficar.graficar_pie(titulo, values, labels);
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1352,7 +1358,14 @@ class CUP$Parser$actions {
           case 52: // declaracion_grafico ::= GLINE OPENPAREN sentencia_grafico EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA 
             {
               Object RESULT =null;
-
+		
+                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
+                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
+                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        Graficar.grafica_linea(titulo, ejex, ejey, titulox, tituloy);
+                    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
