@@ -1009,19 +1009,19 @@ public ArrayList<Token> tokens = new ArrayList<>();
           // fall through
           case 81: break;
           case 27:
-            { tokens.add(new Token("MAX", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MAX, yyline, yycolumn, yytext());
             }
           // fall through
           case 82: break;
           case 28:
-            { tokens.add(new Token("MIN", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MIN, yyline, yycolumn, yytext());
             }
           // fall through
           case 83: break;
           case 29:
-            { tokens.add(new Token("MOD", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MOD, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1069,7 +1069,7 @@ public ArrayList<Token> tokens = new ArrayList<>();
           // fall through
           case 91: break;
           case 37:
-            { tokens.add(new Token("MODA", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MODA, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1081,7 +1081,7 @@ public ArrayList<Token> tokens = new ArrayList<>();
           // fall through
           case 93: break;
           case 39:
-            { tokens.add(new Token("MEDIA", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIA, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1130,7 +1130,7 @@ public ArrayList<Token> tokens = new ArrayList<>();
           // fall through
           case 101: break;
           case 47:
-            { tokens.add(new Token("MEDIANA", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIANA, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1166,7 +1166,7 @@ public ArrayList<Token> tokens = new ArrayList<>();
           // fall through
           case 107: break;
           case 53:
-            { tokens.add(new Token("VARIANZA", yyline, yycolumn, yytext()));
+            { tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.VARIANZA, yyline, yycolumn, yytext());
             }
           // fall through

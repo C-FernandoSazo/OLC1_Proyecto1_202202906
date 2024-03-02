@@ -27,73 +27,13 @@ public class test {
             Scanner scanner = new Scanner(bufferedReader);         
             Parser parser = new Parser(scanner);
             parser.parse();
-            generarHTML_Tokens(scanner.tokens);
-            generarHTML_Errores(ConEjecucion.errores);
+            ConEjecucion.generarHTML_Tokens(scanner.tokens);
+            ConEjecucion.generarHTML_Errores();
             ConEjecucion.generarHTML_TablaDeSimbolos();
             System.out.println("Analisis terminado");
         } catch (Exception e) {
           //  System.out.println(e);
           e.printStackTrace();
-        }
-    }
-    
-    public static void generarHTML_Tokens(ArrayList<Token> tokens) {
-        int contador = 1;
-        try {
-            FileWriter fileWriter = new FileWriter("tokens.html");
-            try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
-                printWriter.println("<!DOCTYPE html>");
-                printWriter.println("<html>");
-                printWriter.println("<head><title>Tokens Reconocidos</title>");
-                // Agregar algo de CSS para centrar la tabla y dar más ancho a la columna #
-                printWriter.println("<style>");
-                printWriter.println("body { display: flex; justify-content: center; align-items: center; flex-direction: column; }");
-                printWriter.println("table { width: 50%; border-collapse: collapse; }");
-                printWriter.println("th, td { padding: 8px; text-align: left; }");
-                printWriter.println("th#numero { width: 10%; }"); 
-                printWriter.println("</style>");
-                printWriter.println("</head>");
-                printWriter.println("<body>");
-                printWriter.println("<h1>Tokens</h1>");
-                printWriter.println("<table border=\"1\">");
-                printWriter.println("<tr><th id=\"numero\">#</th><th>Lexema</th><th>Tipo</th><th>Línea</th><th>Columna</th></tr>");
-                for (Token token : tokens) {
-                    printWriter.println("<tr><td>" + contador + "</td><td>" + token.getValor() + "</td><td>" +
-                            token.getTipo() + "</td><td>" + token.getLinea() + "</td><td>" + token.getColumna() + "</td></tr>");
-                    contador++;
-                }
-                printWriter.println("</table>");
-                printWriter.println("</body>");
-                printWriter.println("</html>");
-                System.out.println("ARCHIVO HTML REALIZADO CON EXITO");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-   
-   public static void generarHTML_Errores(ArrayList<Errores> errores) {
-    try {
-        FileWriter fileWriter = new FileWriter("Errores.html");
-        try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
-            printWriter.println("<!DOCTYPE html>");
-            printWriter.println("<html>");
-            printWriter.println("<head><title>Errores Reconocidos</title></head>");
-            printWriter.println("<body>");
-            printWriter.println("<h1>Errores</h1>");
-            printWriter.println("<table border=\"1\">");
-            printWriter.println("<tr><th>Tipo</th><th>Línea</th><th>Columna</th><th>Lexema</th></tr>");
-            for (Errores error : errores) {
-                printWriter.println("<tr><td>" + error.getTipo() + "</td><td>" + error.getLinea() + "</td><td>" + 
-                        error.getColumna() + "</td><td>" + error.getLexema() + "</td></tr>");
-            }
-            printWriter.println("</table>");
-            printWriter.println("</body>");
-            printWriter.println("</html>");
-            System.out.println("ARCHIVO HTML REALIZADO CON EXITO");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
         }
     }
 }

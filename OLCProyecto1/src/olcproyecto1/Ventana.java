@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import Analizadores.Objetos.ConEjecucion;
 
 
 /**
@@ -51,8 +52,11 @@ public class Ventana extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         openP = new javax.swing.JMenuItem();
         closeP = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        jEjecutarBoton = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
+        jReporteTokens = new javax.swing.JMenuItem();
+        jReporteErrores = new javax.swing.JMenuItem();
+        jTabSimbolos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,15 +118,40 @@ public class Ventana extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Ejecutar");
-        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+        jEjecutarBoton.setText("Ejecutar");
+        jEjecutarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu3ActionPerformed(evt);
+                jEjecutarBotonActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(jEjecutarBoton);
 
         jMenu4.setText("Reportes");
+
+        jReporteTokens.setText("Tokens");
+        jReporteTokens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jReporteTokensActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jReporteTokens);
+
+        jReporteErrores.setText("Errores");
+        jReporteErrores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jReporteErroresActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jReporteErrores);
+
+        jTabSimbolos.setText("Simbolos");
+        jTabSimbolos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTabSimbolosActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jTabSimbolos);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -229,7 +258,7 @@ public class Ventana extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_closePActionPerformed
 
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+    private void jEjecutarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEjecutarBotonActionPerformed
         int indexPestana = panelEntrada.getSelectedIndex();
         
         if (indexPestana != -1){
@@ -238,7 +267,19 @@ public class Ventana extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "No hay ninguna pestaña seleccionada para ejecutar el analizador");
         }
-    }//GEN-LAST:event_jMenu3ActionPerformed
+    }//GEN-LAST:event_jEjecutarBotonActionPerformed
+
+    private void jReporteTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteTokensActionPerformed
+
+    }//GEN-LAST:event_jReporteTokensActionPerformed
+
+    private void jReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteErroresActionPerformed
+        ConEjecucion.generarHTML_Errores();
+    }//GEN-LAST:event_jReporteErroresActionPerformed
+
+    private void jTabSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTabSimbolosActionPerformed
+        ConEjecucion.generarHTML_TablaDeSimbolos();
+    }//GEN-LAST:event_jTabSimbolosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,15 +318,18 @@ public class Ventana extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem closeP;
+    private javax.swing.JMenu jEjecutarBoton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jReporteErrores;
+    private javax.swing.JMenuItem jReporteTokens;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JMenuItem jTabSimbolos;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JMenuItem newArchivo;
     private javax.swing.JMenuItem openArchivo;
