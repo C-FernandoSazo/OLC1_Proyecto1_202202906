@@ -6,7 +6,7 @@
 package Analizadores;
 
 import java_cup.runtime.*;
-import Analizadores.Objetos.ConEjecucion;
+import Analizadores.Objetos.Util;
 import Analizadores.Objetos.Errores;
 import Analizadores.Objetos.Variable;
 import java.util.ArrayList;
@@ -444,7 +444,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
     public void syntax_error(Symbol s){
-        ConEjecucion.errores.add(new Errores("SINTACTICO", s.left, s.right, s.value.toString()));   
+        Util.errores.add(new Errores("SINTACTICO", s.left, s.right, s.value.toString()));   
         System.out.println("Error sintáctico: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
@@ -495,7 +495,7 @@ class CUP$Parser$actions {
             {
               Object RESULT =null;
 		
-    ConEjecucion.imprimirVariables();
+    Util.imprimirVariables();
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("inicio",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -576,7 +576,7 @@ class CUP$Parser$actions {
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 
                     Variable var = new Variable("double",Double.valueOf(v.toString()));
-                    ConEjecucion.variables.put(id.toString(), var); 
+                    Util.variables.put(id.toString(), var); 
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_variable",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -594,7 +594,7 @@ class CUP$Parser$actions {
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 
                     Variable var = new Variable("string",v.toString());
-                    ConEjecucion.variables.put(id.toString(), var); 
+                    Util.variables.put(id.toString(), var); 
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_variable",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -623,7 +623,7 @@ class CUP$Parser$actions {
                     for (int i = 0; i < listaActual.size(); i++) {
                         array[i] = listaActual.get(i);
                     }
-                    ConEjecucion.arrays.put(id.toString(), array);
+                    Util.arrays.put(id.toString(), array);
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_array",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -651,7 +651,7 @@ class CUP$Parser$actions {
                     for (int i = 0; i < listaActual.size(); i++) {
                         array[i] = listaActual.get(i);
                     }
-                    ConEjecucion.arrayChar.put(id.toString(), array);                    
+                    Util.arrayChar.put(id.toString(), array);                    
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_array",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -843,8 +843,8 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                            double[] nums = ConEjecucion.arrays.get(id.toString());
-                            String [] text = ConEjecucion.arrayChar.get(id.toString());
+                            double[] nums = Util.arrays.get(id.toString());
+                            String [] text = Util.arrayChar.get(id.toString());
                             if(nums != null){
                                 RESULT = nums;
                             } else if(text != null) {
@@ -1094,7 +1094,7 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                    double[] array = ConEjecucion.arrays.get(id.toString());
+                    double[] array = Util.arrays.get(id.toString());
                     if (array != null) {
                         RESULT = array;
                     } else {
@@ -1138,7 +1138,7 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                    String[] array = ConEjecucion.arrayChar.get(id.toString());
+                    String[] array = Util.arrayChar.get(id.toString());
                     if (array != null) {
                         RESULT = array;
                     } else {
@@ -1274,7 +1274,7 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                Variable var = ConEjecucion.variables.get(id.toString());
+                Variable var = Util.variables.get(id.toString());
                 if (var != null) {
                     RESULT = var.getValor();
                 } else {
@@ -1290,11 +1290,11 @@ class CUP$Parser$actions {
             {
               Object RESULT =null;
 		
-                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
-                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
-                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
-                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
-                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        String titulo = Util.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) Util.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) Util.atributesGraph.get("ejey");
+                        String titulox = Util.atributesGraph.get("Titulox").toString();
+                        String tituloy = Util.atributesGraph.get("Tituloy").toString();
                         Graficar.grafica_barras(titulo, ejex, ejey, titulox, tituloy);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1306,9 +1306,9 @@ class CUP$Parser$actions {
             {
               Object RESULT =null;
 		
-                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
-                        double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
-                        String [] labels = (String[]) ConEjecucion.atributesGraph.get("labels");
+                        String titulo = Util.atributesGraph.get("Titulo").toString();
+                        double[] values = (double[]) Util.atributesGraph.get("values");
+                        String [] labels = (String[]) Util.atributesGraph.get("labels");
                         Graficar.graficar_pie(titulo, values, labels);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1320,11 +1320,11 @@ class CUP$Parser$actions {
             {
               Object RESULT =null;
 		
-                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();
-                        String [] ejex = (String[]) ConEjecucion.atributesGraph.get("ejex");
-                        double [] ejey = (double[]) ConEjecucion.atributesGraph.get("ejey");
-                        String titulox = ConEjecucion.atributesGraph.get("Titulox").toString();
-                        String tituloy = ConEjecucion.atributesGraph.get("Tituloy").toString();
+                        String titulo = Util.atributesGraph.get("Titulo").toString();
+                        String [] ejex = (String[]) Util.atributesGraph.get("ejex");
+                        double [] ejey = (double[]) Util.atributesGraph.get("ejey");
+                        String titulox = Util.atributesGraph.get("Titulox").toString();
+                        String tituloy = Util.atributesGraph.get("Tituloy").toString();
                         Graficar.grafica_linea(titulo, ejex, ejey, titulox, tituloy);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1336,8 +1336,8 @@ class CUP$Parser$actions {
             {
               Object RESULT =null;
 		
-                        String titulo = ConEjecucion.atributesGraph.get("Titulo").toString();   
-                        double[] values = (double[]) ConEjecucion.atributesGraph.get("values");
+                        String titulo = Util.atributesGraph.get("Titulo").toString();   
+                        double[] values = (double[]) Util.atributesGraph.get("values");
                         Graficar.grafica_histograma(titulo, values);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion_grafico",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1369,7 +1369,7 @@ class CUP$Parser$actions {
 		int tituloleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int tituloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object titulo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 ConEjecucion.atributesGraph.put("Titulo",titulo.toString());  
+		 Util.atributesGraph.put("Titulo",titulo.toString());  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1382,7 +1382,7 @@ class CUP$Parser$actions {
 		int ejexright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object ejex = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 String[] array = (String[]) ejex;
-                    ConEjecucion.atributesGraph.put("ejex",array); 
+                    Util.atributesGraph.put("ejex",array); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1395,7 +1395,7 @@ class CUP$Parser$actions {
 		int ejeyright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object ejey = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 double[] array = (double[]) ejey;
-                    ConEjecucion.atributesGraph.put("ejey",array);  
+                    Util.atributesGraph.put("ejey",array);  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1407,7 +1407,7 @@ class CUP$Parser$actions {
 		int tituloxleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int tituloxright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object titulox = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 ConEjecucion.atributesGraph.put("Titulox",titulox.toString());  
+		 Util.atributesGraph.put("Titulox",titulox.toString());  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1419,7 +1419,7 @@ class CUP$Parser$actions {
 		int tituloyleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int tituloyright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object tituloy = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 ConEjecucion.atributesGraph.put("Tituloy",tituloy.toString());  
+		 Util.atributesGraph.put("Tituloy",tituloy.toString());  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1432,7 +1432,7 @@ class CUP$Parser$actions {
 		int labelsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object labels = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 String[] array = (String[]) labels;
-                    ConEjecucion.atributesGraph.put("labels",array); 
+                    Util.atributesGraph.put("labels",array); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1445,7 +1445,7 @@ class CUP$Parser$actions {
 		int valuesright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object values = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 double[] array = (double[]) values;
-                    ConEjecucion.atributesGraph.put("values",array);  
+                    Util.atributesGraph.put("values",array);  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("atributosGraph",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

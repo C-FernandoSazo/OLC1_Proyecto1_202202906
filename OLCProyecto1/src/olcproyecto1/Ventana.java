@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import Analizadores.Objetos.ConEjecucion;
+import Analizadores.Objetos.Util;
 
 
 /**
@@ -270,15 +270,15 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jEjecutarBotonActionPerformed
 
     private void jReporteTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteTokensActionPerformed
-
+        Util.generarHTML_Tokens();
     }//GEN-LAST:event_jReporteTokensActionPerformed
 
     private void jReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteErroresActionPerformed
-        ConEjecucion.generarHTML_Errores();
+        Util.generarHTML_Errores();
     }//GEN-LAST:event_jReporteErroresActionPerformed
 
     private void jTabSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTabSimbolosActionPerformed
-        ConEjecucion.generarHTML_TablaDeSimbolos();
+        Util.generarHTML_TablaDeSimbolos();
     }//GEN-LAST:event_jTabSimbolosActionPerformed
 
     /**

@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Cesar
  */
-public class ConEjecucion {
+public class Util {
     
     public static ArrayList<Token> tokens = new ArrayList<>();
     public static HashMap<String, Variable> variables = new HashMap<>();
@@ -108,7 +108,7 @@ public class ConEjecucion {
         }
     }
     
-    public static void generarHTML_Tokens(ArrayList<Token> tokens) {
+    public static void generarHTML_Tokens() {
         int contador = 1;
         try {
             FileWriter fileWriter = new FileWriter("tokens.html");

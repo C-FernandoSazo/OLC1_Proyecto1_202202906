@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import Analizadores.Objetos.Token;
 import Analizadores.Objetos.Errores;
-import Analizadores.Objetos.ConEjecucion;
+import Analizadores.Objetos.Util;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -27,9 +27,9 @@ public class test {
             Scanner scanner = new Scanner(bufferedReader);         
             Parser parser = new Parser(scanner);
             parser.parse();
-            ConEjecucion.generarHTML_Tokens(scanner.tokens);
-            ConEjecucion.generarHTML_Errores();
-            ConEjecucion.generarHTML_TablaDeSimbolos();
+            Util.generarHTML_Tokens();
+            Util.generarHTML_Errores();
+            Util.generarHTML_TablaDeSimbolos();
             System.out.println("Analisis terminado");
         } catch (Exception e) {
           //  System.out.println(e);
