@@ -770,7 +770,7 @@ class CUP$Parser$actions {
 		int textright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object text = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    System.out.println("Salida: "+text.toString());
+                    Util.agregarTexto(text.toString());
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("sentencia_print",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -816,20 +816,20 @@ class CUP$Parser$actions {
 		int arregloright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Object arreglo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                            System.out.println("----------");
-                            System.out.println(var.toString());
-                            System.out.println("----------");
+                            Util.agregarTexto("-----------");
+                            Util.agregarTexto(var.toString()); 
+                            Util.agregarTexto("-----------");
                             if (arreglo instanceof double[]){
                                 double[] temp = (double[]) arreglo;
                                 for(double elemento : temp) {
-                                    System.out.println(elemento);
+                                    Util.agregarTexto(String.valueOf(elemento));  
                                 }                                 
                             } else{ 
                                 Object[] array = (Object[]) arreglo;
                                 for(Object elemento : array) {
-                                    System.out.println(elemento);
+                                    Util.agregarTexto(elemento.toString()); 
                                 } 
-                            }  
+                            }   
                         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("sentencia_column",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

@@ -17,6 +17,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
+import Analizadores.Objetos.Util;
 
 public class Graficar {
     
@@ -30,8 +31,10 @@ public class Graficar {
                 titulox, // Eje X
                 tituloy,
                 dataset);
+        String tituloLimpio = titulo.replace(" ", "_").replaceAll("[^a-zA-Z0-9_]", ""); 
         try {
-            ChartUtilities.saveChartAsPNG(new File("GraficaBarras.png"), barChart, 800, 600);
+            ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), barChart, 360, 310);
+            Util.imagenes.add("img/"+tituloLimpio+".png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,8 +55,10 @@ public class Graficar {
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator(
             "{0} : {1} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")
         ));
+        String tituloLimpio = titulo.replace(" ", "_").replaceAll("[^a-zA-Z0-9_]", "");
         try {
-            ChartUtilities.saveChartAsPNG(new File("GraficaPie.png"), pieChart, 800, 600);
+            ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), pieChart, 360, 310);
+            Util.imagenes.add("img/"+tituloLimpio+".png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,18 +74,20 @@ public class Graficar {
                 titulox, // Eje X
                 tituloy,
                 dataset);
+        String tituloLimpio = titulo.replace(" ", "_").replaceAll("[^a-zA-Z0-9_]", "");
         try {
-            ChartUtilities.saveChartAsPNG(new File("GraficaLineas.png"), barChart, 800, 600);
+            ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), barChart, 360, 310);
+            Util.imagenes.add("img/"+tituloLimpio+".png");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-        public static void grafica_histograma(String titulo, double[] datos)    {
-            HistogramDataset dataset = new HistogramDataset();
-            dataset.setType(HistogramType.FREQUENCY);
-            dataset.addSeries("Histogram", datos, datos.length);
-            JFreeChart histogram = ChartFactory.createHistogram(
+    public static void grafica_histograma(String titulo, double[] datos)    {
+        HistogramDataset dataset = new HistogramDataset();
+        dataset.setType(HistogramType.FREQUENCY);
+        dataset.addSeries("Histogram", datos, datos.length);
+        JFreeChart histogram = ChartFactory.createHistogram(
                     titulo, 
                     "Valor", 
                     "Frecuencia"
@@ -89,31 +96,33 @@ public class Graficar {
                     true, 
                     false
                     , false);
-            try {
-            ChartUtilities.saveChartAsPNG(new File("Histograma.png"), histogram, 800, 600);
-            } catch (Exception e) {
+        String tituloLimpio = titulo.replace(" ", "_").replaceAll("[^a-zA-Z0-9_]", "");
+        try {
+            ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), histogram, 360, 310);
+            Util.imagenes.add("img/"+tituloLimpio+".png");
+        } catch (Exception e) {
                 e.printStackTrace();
             }
                 
-            //Imprimir en Consola
-            Arrays.sort(datos);
-            int fb = 0, fa = 0;
-            double fr;
-            double total = datos.length;
-            double prevValue = -1;
+        //Imprimir en Consola
+        Arrays.sort(datos);
+        int fb = 0, fa = 0;
+        double fr;
+        double total = datos.length;
+        double prevValue = -1;
 
-            System.out.println(titulo);
-            System.out.println("Valor\tFb\tFa\tFr");
+        System.out.println(titulo);
+        System.out.println("Valor\tFb\tFa\tFr");
 
-            for (double value : datos) {
-                if (value != prevValue) {
-                    if (fb > 0) {
-                        fa += fb;
-                        fr = (fb / total) * 100;
-                        System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
-                    }
-                    prevValue = value;
-                    fb = 1;
+        for (double value : datos) {
+            if (value != prevValue) {
+                if (fb > 0) {
+                    fa += fb;
+                    fr = (fb / total) * 100;
+                    System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                }
+                prevValue = value;
+                fb = 1;
                 } else {
                     fb++;
                 }

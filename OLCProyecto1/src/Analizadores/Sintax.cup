@@ -136,7 +136,7 @@ lista_valoresChar ::= lista_valoresChar:lista COMA valor:var {:
 ;
 
 sentencia_print ::= CONSOLE DOS_PUNTOS PRINT IGUAL lista_expresiones:text END PUNTO_Y_COMA {:
-                    System.out.println("Salida: "+text.toString());
+                    Util.agregarTexto(text.toString());
                 :}
 ;
 
@@ -147,20 +147,20 @@ lista_expresiones ::= lista_expresiones:text1 COMA valor:text2 {:
 ;
 
 sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor:var ACCESO lista_expresionesColumn:arreglo END PUNTO_Y_COMA  {:
-                            System.out.println("----------");
-                            System.out.println(var.toString());
-                            System.out.println("----------");
+                            Util.agregarTexto("-----------");
+                            Util.agregarTexto(var.toString()); 
+                            Util.agregarTexto("-----------");
                             if (arreglo instanceof double[]){
                                 double[] temp = (double[]) arreglo;
                                 for(double elemento : temp) {
-                                    System.out.println(elemento);
+                                    Util.agregarTexto(String.valueOf(elemento));  
                                 }                                 
                             } else{ 
                                 Object[] array = (Object[]) arreglo;
                                 for(Object elemento : array) {
-                                    System.out.println(elemento);
+                                    Util.agregarTexto(elemento.toString()); 
                                 } 
-                            }  
+                            }   
                         :}
 ;
 

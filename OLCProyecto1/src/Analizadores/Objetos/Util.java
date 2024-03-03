@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import Listas.ListaCircular;
 
 /**
  *
@@ -23,6 +24,16 @@ public class Util {
     public static HashMap<String, Object> atributesGraph = new HashMap<>();
     public static ArrayList<Errores> errores = new ArrayList<>();
     public static ArrayList<Token> insVariables = new ArrayList<>();
+    public static String textoConsola;
+    public static ListaCircular imagenes = new ListaCircular();
+    
+    public static void agregarTexto(String texto)   {
+        textoConsola += texto+"\n";
+    }
+    
+    public static void clearText()  {
+        textoConsola = "";
+    }
     
     public static void imprimirVariables() {
         System.out.println("Analizadores.ConEjecucion.imprimirVariables()");
@@ -60,7 +71,7 @@ public class Util {
             try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
                 printWriter.println("<!DOCTYPE html>");
                 printWriter.println("<html>");
-                printWriter.println("<head><title>Tabla de Símbolos</title>");
+                printWriter.println("<head><title>Tabla de Simbolos</title>");
                 // Estilos CSS
                 printWriter.println("<style>");
                 printWriter.println("body { display: flex; justify-content: center; align-items: center; flex-direction: column; }");
