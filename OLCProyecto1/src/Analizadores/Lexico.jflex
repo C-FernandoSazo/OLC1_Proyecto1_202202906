@@ -2,7 +2,6 @@
 
 package Analizadores;
 import java_cup.runtime.Symbol;
-import java.util.ArrayList;
 import Analizadores.Objetos.Util;
 import Analizadores.Objetos.Token;
 import Analizadores.Objetos.Errores;
@@ -27,7 +26,7 @@ import Analizadores.Objetos.Errores;
 
 // Expresiones Regulares
 
-IDENTIFICADOR = [a-zA-Z][a-zA-Z0-9]*
+IDENTIFICADOR = ([a-zA-Z][a-zA-Z0-9]*|char\[\])
 NUMERO = [0-9]+
 DECIMAL = {NUMERO}\.{NUMERO}
 CADENA = \"[^\"]*\"
@@ -85,14 +84,6 @@ COMENTARIO = "!"[^\n]* "\n"
     Util.tokens.add(new Token("PROGRAM", yyline, yycolumn, yytext()));
     return new Symbol(sym.PROGRAM, yyline, yycolumn, yytext());
     
-}
-"double"  {
-    Util.tokens.add(new Token("TIPO VAR", yyline, yycolumn, yytext()));
-    return new Symbol(sym.DOUBLE, yyline, yycolumn, yytext());
-}
-"char[]"  {
-    Util.tokens.add(new Token("TIPO VAR", yyline, yycolumn, yytext()));
-    return new Symbol(sym.CHAR, yyline, yycolumn, yytext());
 }
 "@"      {
     Util.tokens.add(new Token("ARROBA", yyline, yycolumn, yytext()));
@@ -227,8 +218,12 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.CADENA, yyline, yycolumn, yytext());
 }
 {IDENTIFICADOR} {
-    Util.insVariables.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
-    Util.tokens.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
+    if(yytext().toLowerCase().equals("double") || yytext().toLowerCase().equals("char[]")) {
+        Util.tokens.add(new Token("ID", yyline, yycolumn, yytext()));
+    } else  {
+        Util.insVariables.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
+        Util.tokens.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
+        }
     return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());
 }
 {NUMERO}       {

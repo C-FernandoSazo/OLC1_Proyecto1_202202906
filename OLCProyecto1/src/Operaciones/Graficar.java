@@ -84,6 +84,7 @@ public class Graficar {
     }
     
     public static void grafica_histograma(String titulo, double[] datos)    {
+        String temp;
         HistogramDataset dataset = new HistogramDataset();
         dataset.setType(HistogramType.FREQUENCY);
         dataset.addSeries("Histogram", datos, datos.length);
@@ -111,15 +112,16 @@ public class Graficar {
         double total = datos.length;
         double prevValue = -1;
 
-        System.out.println(titulo);
-        System.out.println("Valor\tFb\tFa\tFr");
+        Util.agregarTexto(titulo);
+        Util.agregarTexto("Valor\tFb\tFa\tFr");
 
         for (double value : datos) {
             if (value != prevValue) {
                 if (fb > 0) {
                     fa += fb;
                     fr = (fb / total) * 100;
-                    System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                    temp = String.format("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                    Util.agregarTexto(temp);
                 }
                 prevValue = value;
                 fb = 1;
@@ -130,10 +132,11 @@ public class Graficar {
             if (fb > 0) {
                 fa += fb;
                 fr = (fb / total) * 100;
-                System.out.printf("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                temp = String.format("%d\t%d\t%d\t%.0f%%\n", (int) prevValue, fb, fa, fr);
+                Util.agregarTexto(temp);
             }
 
-            System.out.println("Totales:\t" + (int) total + "\t" + (int) total + "\t100%");
+            Util.agregarTexto("Totales:\t" + (int) total + "\t" + (int) total + "\t100%");
         
     }
       

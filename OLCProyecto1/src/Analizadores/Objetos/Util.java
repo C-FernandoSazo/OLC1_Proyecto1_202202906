@@ -35,6 +35,17 @@ public class Util {
         textoConsola = "";
     }
     
+    public static void clearAll() {
+        tokens.clear();
+        variables.clear();
+        arrays.clear();
+        arrayChar.clear();
+        errores.clear();
+        insVariables.clear();
+        textoConsola = "";
+        imagenes.vaciar();
+    }
+    
     public static void imprimirVariables() {
         System.out.println("Analizadores.ConEjecucion.imprimirVariables()");
         for (Map.Entry<String, Variable> entry : variables.entrySet()) {

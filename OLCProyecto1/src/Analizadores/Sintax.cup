@@ -14,12 +14,12 @@ parser code
         System.out.println("Error sintáctico: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        System.out.println("Error sintáctico unrecovered: "+s.value+" linea: "+s.left+" columna: "+s.right);
+        System.err.println("Error sintáctico unrecovered: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
 :}
 
 terminal IDENTIFICADOR, NUMERO, CADENA, DECIMAL;
-terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, DOUBLE, CHAR, PROGRAM, END, ASIGNACION, ACCESO;
+terminal VAR, PUNTO_Y_COMA, PUNTOS, DOS_PUNTOS, PROGRAM, END, ASIGNACION, ACCESO;
 terminal COMA, ARROBA, ARR, OPENCORCHETE, CLOSECORCHETE, OPENPAREN, CLOSEPAREN, IGUAL, CONSOLE, PRINT, COLUMN;
 terminal SUMA, RESTA, MULT, DIV, MOD, MEDIA, MEDIANA, MODA, VARIANZA, MAX, MIN;
 terminal GBAR, GPIE, GLINE, GHISTOGRAM, TITULO, EJEX, EJEY, TITULOX, TITULOY, VALUES, LABEL, EXEC;
@@ -45,55 +45,58 @@ declaraciones ::= declaraciones sentencia
 
 sentencia ::= declaracion_variable
                 | sentencia_print
-                | declaracion_array
                 | sentencia_column
+                | declaracion_array
                 | declaracion_grafico
+                | error PUNTO_Y_COMA
 ;
 
-declaracion_variable ::= VAR PUNTOS DOUBLE DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor_double:v END PUNTO_Y_COMA
+declaracion_variable ::= VAR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END PUNTO_Y_COMA
                 {: 
+                    if (tipo.toString().toLowerCase().equals("double")) {
                     Variable var = new Variable("double",Double.valueOf(v.toString()));
-                    Util.variables.put(id.toString(), var); 
-                :}   
-                | VAR PUNTOS CHAR DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor_string:v END PUNTO_Y_COMA
-               {: 
-                    Variable var = new Variable("string",v.toString());
-                    Util.variables.put(id.toString(), var); 
+                    Util.variables.put(id.toString(), var);
+                    } else if (tipo.toString().toLowerCase().equals("char[]")) {
+                            Variable var = new Variable("string",v.toString());
+                            Util.variables.put(id.toString(), var); 
+                        } else {
+                            Util.errores.add(new Errores("SINTACTICO \nTipo de variable no reconocible", tipoleft, tiporight, tipo.toString())); 
+                        }
                 :}
 ;
 
-declaracion_array ::= ARR PUNTOS DOUBLE DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
-                        lista_valoresDouble:lista CLOSECORCHETE END PUNTO_Y_COMA
+declaracion_array ::= ARR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
+                        lista_valores:lista CLOSECORCHETE END PUNTO_Y_COMA
                 {:
-                    // Casting seguro a ArrayList<Double>
-                    ArrayList<Double> listaActual;
-                    if (lista instanceof ArrayList) {
-                        listaActual = (ArrayList<Double>) lista;
+                    if (tipo.toString().toLowerCase().equals("double")) {
+                        ArrayList<Double> listaActual;
+                        if (lista instanceof ArrayList) {
+                            listaActual = (ArrayList<Double>) lista;
+                        } else {
+                            // Manejo de error o inicialización alternativa
+                            listaActual = new ArrayList<Double>();
+                        }
+                        double[] array = new double[listaActual.size()];
+                        for (int i = 0; i < listaActual.size(); i++) {
+                            array[i] = listaActual.get(i);
+                        }
+                        Util.arrays.put(id.toString(), array);
+                    } else if (tipo.toString().toLowerCase().equals("char[]"))  {
+                        ArrayList<String> listaActual;
+                        if (lista instanceof ArrayList) {
+                            listaActual = (ArrayList<String>) lista;
+                        } else {
+                            // Manejo de error o inicialización alternativa
+                            listaActual = new ArrayList<String>();
+                        }
+                        String[] array = new String[listaActual.size()];
+                        for (int i = 0; i < listaActual.size(); i++) {
+                            array[i] = listaActual.get(i);
+                        }
+                        Util.arrayChar.put(id.toString(), array);
                     } else {
-                        // Manejo de error o inicialización alternativa
-                        listaActual = new ArrayList<Double>();
-                    }
-                    double[] array = new double[listaActual.size()];
-                    for (int i = 0; i < listaActual.size(); i++) {
-                        array[i] = listaActual.get(i);
-                    }
-                    Util.arrays.put(id.toString(), array);
-                :}
-    | ARR PUNTOS CHAR DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
-        lista_valoresChar:lista CLOSECORCHETE END PUNTO_Y_COMA
-                {:
-                    ArrayList<String> listaActual;
-                    if (lista instanceof ArrayList) {
-                        listaActual = (ArrayList<String>) lista;
-                    } else {
-                        // Manejo de error o inicialización alternativa
-                        listaActual = new ArrayList<String>();
-                    }
-                    String[] array = new String[listaActual.size()];
-                    for (int i = 0; i < listaActual.size(); i++) {
-                        array[i] = listaActual.get(i);
-                    }
-                    Util.arrayChar.put(id.toString(), array);                    
+                            Util.errores.add(new Errores("SINTACTICO \nTipo de variable no reconocible", tipoleft, tiporight, tipo.toString())); 
+                        }
                 :}
 ;
 
@@ -147,6 +150,7 @@ lista_expresiones ::= lista_expresiones:text1 COMA valor:text2 {:
 ;
 
 sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor:var ACCESO lista_expresionesColumn:arreglo END PUNTO_Y_COMA  {:
+                            System.out.println("ENTRO A IMPRESION ARRAYS");
                             Util.agregarTexto("-----------");
                             Util.agregarTexto(var.toString()); 
                             Util.agregarTexto("-----------");
@@ -369,22 +373,22 @@ sentencia_grafico ::= sentencia_grafico atributosGraph
                     | atributosGraph
 ;
 
-atributosGraph ::= TITULO DOS_PUNTOS CHAR IGUAL valor:titulo END PUNTO_Y_COMA
+atributosGraph ::= TITULO DOS_PUNTOS IDENTIFICADOR IGUAL valor:titulo END PUNTO_Y_COMA
                 {: Util.atributesGraph.put("Titulo",titulo.toString());  :}
-                | EJEX DOS_PUNTOS CHAR IGUAL arreglo_char:ejex END PUNTO_Y_COMA
+                | EJEX DOS_PUNTOS IDENTIFICADOR IGUAL arreglo_char:ejex END PUNTO_Y_COMA
                 {: String[] array = (String[]) ejex;
                     Util.atributesGraph.put("ejex",array); :}
-                | EJEY DOS_PUNTOS DOUBLE IGUAL arreglo_double:ejey END PUNTO_Y_COMA
+                | EJEY DOS_PUNTOS IDENTIFICADOR IGUAL arreglo_double:ejey END PUNTO_Y_COMA
                 {: double[] array = (double[]) ejey;
                     Util.atributesGraph.put("ejey",array);  :}
-                | TITULOX DOS_PUNTOS CHAR IGUAL valor:titulox END PUNTO_Y_COMA
+                | TITULOX DOS_PUNTOS IDENTIFICADOR IGUAL valor:titulox END PUNTO_Y_COMA
                 {: Util.atributesGraph.put("Titulox",titulox.toString());  :}
-                | TITULOY DOS_PUNTOS CHAR IGUAL valor:tituloy END PUNTO_Y_COMA
+                | TITULOY DOS_PUNTOS IDENTIFICADOR IGUAL valor:tituloy END PUNTO_Y_COMA
                 {: Util.atributesGraph.put("Tituloy",tituloy.toString());  :}
-                | LABEL DOS_PUNTOS CHAR IGUAL arreglo_char:labels END PUNTO_Y_COMA
+                | LABEL DOS_PUNTOS IDENTIFICADOR IGUAL arreglo_char:labels END PUNTO_Y_COMA
                 {: String[] array = (String[]) labels;
                     Util.atributesGraph.put("labels",array); :}
-                | VALUES DOS_PUNTOS DOUBLE IGUAL arreglo_double:values END PUNTO_Y_COMA
+                | VALUES DOS_PUNTOS IDENTIFICADOR IGUAL arreglo_double:values END PUNTO_Y_COMA
                 {: double[] array = (double[]) values;
                     Util.atributesGraph.put("values",array);  :}
 ;
