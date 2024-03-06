@@ -1,0 +1,82 @@
+Gramática
+<inicio> ::= 'PROGRAM' <declaraciones> 'END' 'PROGRAM';
+
+<declaraciones> ::= <declaraciones> <sentencia>
+                  | <sentencia>;
+
+<sentencia> ::= <declaracion_variable>
+              | <sentencia_print>
+              | <sentencia_column>
+              | <declaracion_array>
+              | <declaracion_grafico>
+              | 'error' 'PUNTO_Y_COMA';
+
+<declaracion_variable> ::= 'VAR' 'PUNTOS' 'IDENTIFICADOR' 'DOS_PUNTOS' 'IDENTIFICADOR' 'ASIGNACION' <valor> 'END' 'PUNTO_Y_COMA';
+
+<declaracion_array> ::= 'ARR' 'PUNTOS' 'IDENTIFICADOR' 'DOS_PUNTOS' 'ARROBA' 'IDENTIFICADOR' 'ASIGNACION' 'OPENCORCHETE' <lista_valores> 'CLOSECORCHETE' 'END' 'PUNTO_Y_COMA';
+
+<lista_valores> ::= <lista_valores> 'COMA' <valor>
+                  | <valor>;
+
+<sentencia_print> ::= 'CONSOLE' 'DOS_PUNTOS' 'PRINT' 'IGUAL' <lista_expresiones> 'END' 'PUNTO_Y_COMA';
+
+<lista_expresiones> ::= <lista_expresiones> 'COMA' <valor>
+                      | <valor>;
+
+<sentencia_column> ::= 'CONSOLE' 'DOS_PUNTOS' 'COLUMN' 'IGUAL' <valor> 'ACCESO' <lista_expresionesColumn> 'END' 'PUNTO_Y_COMA';
+
+<lista_expresionesColumn> ::= 'ARROBA' 'IDENTIFICADOR'
+                            | 'OPENCORCHETE' <lista_valores> 'CLOSECORCHETE';
+
+<operacion_arit> ::= 'SUMA' 'OPENPAREN' <valor> 'COMA' <valor> 'CLOSEPAREN'
+                   | 'RESTA' 'OPENPAREN' <valor> 'COMA' <valor> 'CLOSEPAREN'
+                   | 'MULT' 'OPENPAREN' <valor> 'COMA' <valor> 'CLOSEPAREN'
+                   | 'DIV' 'OPENPAREN' <valor> 'COMA' <valor> 'CLOSEPAREN'
+                   | 'MOD' 'OPENPAREN' <valor> 'COMA' <valor> 'CLOSEPAREN';
+
+<funcion_estadistica> ::= 'MEDIA' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN'
+                        | 'MEDIANA' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN'
+                        | 'MODA' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN'
+                        | 'VARIANZA' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN'
+                        | 'MAX' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN'
+                        | 'MIN' 'OPENPAREN' <arreglo_double> 'CLOSEPAREN';
+
+<valor> ::= <valor_double>
+          | <valor_string>
+          | <variable>;
+
+<valor_double> ::= 'NUMERO'
+                 | 'DECIMAL'
+                 | <operacion_arit>
+                 | <funcion_estadistica>;
+
+<valor_string> ::= 'CADENA';
+
+<variable> ::= 'IDENTIFICADOR';
+
+<declaracion_grafico> ::= <tipo_grafico> 'OPENPAREN' <sentencia_grafico> 'EXEC' <tipo_grafico> 'END' 'PUNTO_Y_COMA' 'CLOSEPAREN' 'END' 'PUNTO_Y_COMA';
+
+<tipo_grafico> ::= 'GBAR' | 'GPIE' | 'GLINE' | 'GHISTOGRAM';
+
+<sentencia_grafico> ::= <sentencia_grafico> <atributosGraph>
+                      | <atributosGraph>;
+
+<atributosGraph> ::= 'TITULO' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <valor> 'END' 'PUNTO_Y_COMA'
+                   | 'EJEX' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <arreglo_char> 'END' 'PUNTO_Y_COMA'
+                   | 'EJEY' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <arreglo_double> 'END' 'PUNTO_Y_COMA'
+                   | 'TITULOX' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <valor> 'END' 'PUNTO_Y_COMA'
+                   | 'TITULOY' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <valor> 'END' 'PUNTO_Y_COMA'
+                   | 'LABEL' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <arreglo_char> 'END' 'PUNTO_Y_COMA'
+                   | 'VALUES' 'DOS_PUNTOS' 'IDENTIFICADOR' 'IGUAL' <arreglo_double> 'END' 'PUNTO_Y_COMA';
+
+<arreglo_double> ::= 'OPENCORCHETE' <lista_valoresDouble> 'CLOSECORCHETE'
+                   | 'ARROBA' 'IDENTIFICADOR';
+
+<arreglo_char> ::= 'OPENCORCHETE' <lista_valoresChar> 'CLOSECORCHETE'
+                 | 'ARROBA' 'IDENTIFICADOR';
+
+<lista_valoresDouble> ::= <lista_valoresDouble> 'COMA' <valor_double>
+                        | <valor_double>;
+
+<lista_valoresChar> ::= <lista_valoresChar> 'COMA' <valor_string>
+                      | <valor_string>;

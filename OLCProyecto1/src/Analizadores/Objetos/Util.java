@@ -182,7 +182,7 @@ public class Util {
                 printWriter.println("<body>");
                 printWriter.println("<h1>Errores</h1>");
                 printWriter.println("<table border=\"1\">");
-                printWriter.println("<tr><th>#</th><th>Tipo</th><th>Lexema</th><th>Línea</th><th>Columna</th></tr>");
+                printWriter.println("<tr><th>#</th><th>Tipo</th><th>Descripcion</th><th>Línea</th><th>Columna</th></tr>");
                 for (Errores error : errores) {
                     printWriter.println("<tr><td>" + contador + "</td><td>" + error.getTipo() + "</td><td>" + error.getLexema() + "</td><td>" + 
                             error.getLinea() + "</td><td>" + error.getColumna() + "</td></tr>");

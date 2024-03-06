@@ -14,6 +14,7 @@ parser code
         System.out.println("Error sintáctico: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        Util.errores.add(new Errores("SINTACTICO", s.left, s.right, s.value.toString()));   
         System.err.println("Error sintáctico unrecovered: "+s.value+" linea: "+s.left+" columna: "+s.right);
     }
 :}
@@ -60,8 +61,11 @@ declaracion_variable ::= VAR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS IDENTIFICADOR:
                             Variable var = new Variable("string",v.toString());
                             Util.variables.put(id.toString(), var); 
                         } else {
-                            Util.errores.add(new Errores("SINTACTICO \nTipo de variable no reconocible", tipoleft, tiporight, tipo.toString())); 
+                            Util.errores.add(new Errores("SINTACTICO", tipoleft, tiporight, "Tipo de variable no reconocible")); 
                         }
+                :}
+                | VAR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS IDENTIFICADOR:id ASIGNACION valor:v END  {:
+                    Util.errores.add(new Errores("SINTACTICO", tipoleft, vright, "Falto ';'")); 
                 :}
 ;
 
@@ -98,6 +102,11 @@ declaracion_array ::= ARR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS ARROBA IDENTIFICA
                             Util.errores.add(new Errores("SINTACTICO \nTipo de variable no reconocible", tipoleft, tiporight, tipo.toString())); 
                         }
                 :}
+                | ARR PUNTOS IDENTIFICADOR:tipo DOS_PUNTOS ARROBA IDENTIFICADOR:id ASIGNACION OPENCORCHETE 
+                        lista_valores:lista CLOSECORCHETE END {:
+                        Util.errores.add(new Errores("SINTACTICO", tipoleft, listaright, "Falto ';'")); 
+                        :}
+
 ;
 
 lista_valores ::= lista_valores:lista COMA valor:var {:
@@ -141,6 +150,9 @@ lista_valoresChar ::= lista_valoresChar:lista COMA valor:var {:
 sentencia_print ::= CONSOLE DOS_PUNTOS PRINT IGUAL lista_expresiones:text END PUNTO_Y_COMA {:
                     Util.agregarTexto(text.toString());
                 :}
+                | CONSOLE DOS_PUNTOS PRINT IGUAL lista_expresiones:text END  {:
+                    Util.errores.add(new Errores("SINTACTICO", textleft, textright, "Falto ';'"));
+                :}
 ;
 
 lista_expresiones ::= lista_expresiones:text1 COMA valor:text2 {:
@@ -166,6 +178,9 @@ sentencia_column ::= CONSOLE DOS_PUNTOS COLUMN IGUAL valor:var ACCESO lista_expr
                                 } 
                             }   
                         :}
+                    | CONSOLE DOS_PUNTOS COLUMN IGUAL valor:var ACCESO lista_expresionesColumn:arreglo END   {:
+                        Util.errores.add(new Errores("SINTACTICO \nFalto ';'",arregloleft, arregloright, "Falto ';'"));
+                    :}
 ;
 
 

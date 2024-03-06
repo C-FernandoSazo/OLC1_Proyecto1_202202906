@@ -126,43 +126,43 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.DIV, yyline, yycolumn, yytext());
 }
 "mod"    {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MOD, yyline, yycolumn, yytext());
 }
 "media"    {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIA, yyline, yycolumn, yytext());
 }
 "mediana"  {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIANA, yyline, yycolumn, yytext());
 }
 "moda"      {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MODA, yyline, yycolumn, yytext());
 }
 "varianza"   {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.VARIANZA, yyline, yycolumn, yytext());
 }
 "max"        {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MAX, yyline, yycolumn, yytext());
 }
 "min"        {
-    Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MIN, yyline, yycolumn, yytext());
 }
 "console"    {
-    Util.tokens.add(new Token("CONSOLE", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.CONSOLE, yyline, yycolumn, yytext());
 }
 "print"      {
-    Util.tokens.add(new Token("PRINT", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.PRINT, yyline, yycolumn, yytext());
 }
 "column"    {
-    Util.tokens.add(new Token("COLUMN", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.COLUMN, yyline, yycolumn, yytext());
 }
 "graphbar"    {
@@ -182,35 +182,35 @@ COMENTARIO = "!"[^\n]* "\n"
     return new Symbol(sym.GHISTOGRAM, yyline, yycolumn, yytext());
 }
 "titulo"    {
-    Util.tokens.add(new Token("TITULO", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULO, yyline, yycolumn, yytext());
 }
 "ejex"    {
-    Util.tokens.add(new Token("EJEX", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EJEX, yyline, yycolumn, yytext());
 }
 "ejey"    {
-    Util.tokens.add(new Token("EJEY", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EJEY, yyline, yycolumn, yytext());
 }
 "titulox"    {
-    Util.tokens.add(new Token("TITULOX", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULOX, yyline, yycolumn, yytext());
 }
 "tituloy"    {
-    Util.tokens.add(new Token("TITULOY", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULOY, yyline, yycolumn, yytext());
 }
 "values"    {
-    Util.tokens.add(new Token("VALUES", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.VALUES, yyline, yycolumn, yytext());
 }
 "label"    {
-    Util.tokens.add(new Token("LABEL", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.LABEL, yyline, yycolumn, yytext());
 }
 "exec"    {
-    Util.tokens.add(new Token("EXEC", yyline, yycolumn, yytext()));
+    Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EXEC, yyline, yycolumn, yytext());
 }
 {CADENA}        {
@@ -219,7 +219,7 @@ COMENTARIO = "!"[^\n]* "\n"
 }
 {IDENTIFICADOR} {
     if(yytext().toLowerCase().equals("double") || yytext().toLowerCase().equals("char[]")) {
-        Util.tokens.add(new Token("ID", yyline, yycolumn, yytext()));
+        Util.tokens.add(new Token("TIPO VARIABLE", yyline, yycolumn, yytext()));
     } else  {
         Util.insVariables.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
         Util.tokens.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
@@ -240,6 +240,6 @@ COMENTARIO = "!"[^\n]* "\n"
 [ \t\r\n\f]     {/* Espacios en blanco se ignoran */}
 
 . {
-    Util.errores.add(new Errores("LEXICO", yyline, yycolumn, yytext()));
+    Util.errores.add(new Errores("LEXICO", yyline, yycolumn+1, "El caracter '"+yytext()+"' no \npertenece al lenguaje"));
     System.out.println("Lexical error: "+yytext()+" linea: "+yyline+" columna: "+yycolumn);
 }

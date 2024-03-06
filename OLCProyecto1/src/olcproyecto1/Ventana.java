@@ -82,7 +82,7 @@ public class Ventana extends javax.swing.JFrame {
 
         lienzo.setToolTipText("");
 
-        jButtonAnterior.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonAnterior.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButtonAnterior.setText("<");
         jButtonAnterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,7 +90,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        jButtonSiguiente.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonSiguiente.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButtonSiguiente.setText(">");
         jButtonSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,15 +201,17 @@ public class Ventana extends javax.swing.JFrame {
                         .addGap(126, 126, 126))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(panelEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                                    .addComponent(panelEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lienzo, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(220, 220, 220))
+                                    .addComponent(lienzo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2))
                         .addGap(36, 36, 36))))
         );
         layout.setVerticalGroup(
@@ -221,14 +223,19 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(panelEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                     .addComponent(lienzo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jButtonAnterior)
-                    .addComponent(jButtonSiguiente))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonAnterior)
+                            .addComponent(jButtonSiguiente))
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
@@ -307,6 +314,7 @@ public class Ventana extends javax.swing.JFrame {
     private void jReporteTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteTokensActionPerformed
         if (!Util.tokens.isEmpty())  {
             Util.generarHTML_Tokens();
+            JOptionPane.showMessageDialog(this, "Se ha generado el reporte de Tokens");
         } else {
             JOptionPane.showMessageDialog(this, "No se han cargado tokens");
         }
@@ -315,6 +323,7 @@ public class Ventana extends javax.swing.JFrame {
     private void jReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReporteErroresActionPerformed
         if (!Util.errores.isEmpty())  {
             Util.generarHTML_Errores();
+            JOptionPane.showMessageDialog(this, "Se ha generado el reporte de Errores");
         } else {
             JOptionPane.showMessageDialog(this, "No se han cargado errores");
         }
@@ -323,6 +332,7 @@ public class Ventana extends javax.swing.JFrame {
     private void jTabSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTabSimbolosActionPerformed
         if (!Util.variables.isEmpty() || !Util.arrays.isEmpty() || !Util.arrayChar.isEmpty())  {
             Util.generarHTML_TablaDeSimbolos();
+            JOptionPane.showMessageDialog(this, "Se ha generado la Tabla de Simbolos");
         } else {
             JOptionPane.showMessageDialog(this, "No se han cargado variables");
         }

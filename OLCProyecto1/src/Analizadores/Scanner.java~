@@ -850,7 +850,7 @@ public class Scanner implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { Util.errores.add(new Errores("LEXICO", yyline, yycolumn, yytext()));
+            { Util.errores.add(new Errores("LEXICO", yyline, yycolumn+1, "El caracter '"+yytext()+"' no \npertenece al lenguaje"));
     System.out.println("Lexical error: "+yytext()+" linea: "+yyline+" columna: "+yycolumn);
             }
           // fall through
@@ -910,7 +910,7 @@ public class Scanner implements java_cup.runtime.Scanner {
           case 63: break;
           case 11:
             { if(yytext().toLowerCase().equals("double") || yytext().toLowerCase().equals("char[]")) {
-        Util.tokens.add(new Token("ID", yyline, yycolumn, yytext()));
+        Util.tokens.add(new Token("TIPO VARIABLE", yyline, yycolumn, yytext()));
     } else  {
         Util.insVariables.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
         Util.tokens.add(new Token("VARIABLE", yyline, yycolumn, yytext()));
@@ -1005,19 +1005,19 @@ public class Scanner implements java_cup.runtime.Scanner {
           // fall through
           case 79: break;
           case 27:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MAX, yyline, yycolumn, yytext());
             }
           // fall through
           case 80: break;
           case 28:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MIN, yyline, yycolumn, yytext());
             }
           // fall through
           case 81: break;
           case 29:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MOD, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1047,73 +1047,73 @@ public class Scanner implements java_cup.runtime.Scanner {
           // fall through
           case 86: break;
           case 34:
-            { Util.tokens.add(new Token("EJEX", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EJEX, yyline, yycolumn, yytext());
             }
           // fall through
           case 87: break;
           case 35:
-            { Util.tokens.add(new Token("EJEY", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EJEY, yyline, yycolumn, yytext());
             }
           // fall through
           case 88: break;
           case 36:
-            { Util.tokens.add(new Token("EXEC", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.EXEC, yyline, yycolumn, yytext());
             }
           // fall through
           case 89: break;
           case 37:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MODA, yyline, yycolumn, yytext());
             }
           // fall through
           case 90: break;
           case 38:
-            { Util.tokens.add(new Token("LABEL", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.LABEL, yyline, yycolumn, yytext());
             }
           // fall through
           case 91: break;
           case 39:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIA, yyline, yycolumn, yytext());
             }
           // fall through
           case 92: break;
           case 40:
-            { Util.tokens.add(new Token("PRINT", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.PRINT, yyline, yycolumn, yytext());
             }
           // fall through
           case 93: break;
           case 41:
-            { Util.tokens.add(new Token("COLUMN", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.COLUMN, yyline, yycolumn, yytext());
             }
           // fall through
           case 94: break;
           case 42:
-            { Util.tokens.add(new Token("TITULO", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULO, yyline, yycolumn, yytext());
             }
           // fall through
           case 95: break;
           case 43:
-            { Util.tokens.add(new Token("VALUES", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.VALUES, yyline, yycolumn, yytext());
             }
           // fall through
           case 96: break;
           case 44:
-            { Util.tokens.add(new Token("CONSOLE", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("OUTPUT", yyline, yycolumn, yytext()));
     return new Symbol(sym.CONSOLE, yyline, yycolumn, yytext());
             }
           // fall through
           case 97: break;
           case 45:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.MEDIANA, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1125,13 +1125,13 @@ public class Scanner implements java_cup.runtime.Scanner {
           // fall through
           case 99: break;
           case 47:
-            { Util.tokens.add(new Token("TITULOX", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULOX, yyline, yycolumn, yytext());
             }
           // fall through
           case 100: break;
           case 48:
-            { Util.tokens.add(new Token("TITULOY", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("ATRIBUTOGRAPH", yyline, yycolumn, yytext()));
     return new Symbol(sym.TITULOY, yyline, yycolumn, yytext());
             }
           // fall through
@@ -1149,7 +1149,7 @@ public class Scanner implements java_cup.runtime.Scanner {
           // fall through
           case 103: break;
           case 51:
-            { Util.tokens.add(new Token("ESTADISTICA", yyline, yycolumn, yytext()));
+            { Util.tokens.add(new Token("FUNESTADISTICA", yyline, yycolumn, yytext()));
     return new Symbol(sym.VARIANZA, yyline, yycolumn, yytext());
             }
           // fall through
