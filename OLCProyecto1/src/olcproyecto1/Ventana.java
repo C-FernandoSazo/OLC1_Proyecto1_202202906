@@ -17,7 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Analizadores.Objetos.Util;
 import Listas.NodoImagen;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -204,8 +205,8 @@ public class Ventana extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(panelEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                                    .addComponent(panelEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jLabel3)
@@ -223,11 +224,11 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                    .addComponent(lienzo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lienzo, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .addComponent(panelEntrada))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonAnterior)
                             .addComponent(jButtonSiguiente))
@@ -340,6 +341,7 @@ public class Ventana extends javax.swing.JFrame {
 
     private void jEjecutarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEjecutarBotonActionPerformed
         int indexPestana = panelEntrada.getSelectedIndex();
+        lienzo.setIcon(null);
         if (indexPestana != -1){
             Util.clearAll();
             jConsola.setText("");
@@ -374,11 +376,16 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAnteriorActionPerformed
 
     private void MostrarImagen(JLabel lienzo, String ruta){
-        if(!ruta.equals("")){
-            Image mImagen = new ImageIcon(ruta).getImage();
-            ImageIcon Icono = new ImageIcon(mImagen);
-            lienzo.setIcon(Icono);
-            this.repaint();
+        try {
+            File imgFile = new File(ruta);
+            // Invalidando el caché de la imagen
+            ImageIO.setUseCache(false);
+            BufferedImage img = ImageIO.read(imgFile);
+            ImageIcon icon = new ImageIcon(img);
+            lienzo.setIcon(icon);
+            lienzo.repaint(); // Forzando al JLabel a repintarse con la nueva imagen
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     /**

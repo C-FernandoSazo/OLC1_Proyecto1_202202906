@@ -35,16 +35,8 @@ public class ListaCircular {
     }
     
     public void vaciar() {
-        if (this.inicio != null) {
-            NodoImagen actual = this.inicio;
-            do {
-                NodoImagen siguiente = actual.getSiguiente();
-                actual.setSiguiente(null);
-                actual.setAnterior(null);
-                actual = siguiente;
-            } while (actual != this.inicio);
-            this.inicio = null;
-        }
+        inicio = null;
+        fin = null;
     }
     
     public NodoImagen peek() {

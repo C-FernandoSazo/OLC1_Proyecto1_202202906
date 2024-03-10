@@ -1,4 +1,14 @@
-Gramática
+
+terminales:
+PROGRAM = "program", END = "end", PUNTOS = ":", IDENTIFICADOR = ([a-zA-Z][a-zA-Z0-9]*|char\[\]), DOS_PUNTOS = "::", ASIGNACION = "=", 
+PUNTO_Y_COMA = ";", ARR = "arr", ARROBA = "@", OPENCORCHETE = "[", CLOSECORCHETE = "]", COMA = ",", CONSOLE = "console", PRINT = "print", IGUAL = "=",
+COLUMN = "column", ACCESO = ".", SUMA = "suma", RESTA = "resta", MULT = "mult", DIV = "div", MOD = "mod", MEDIA = "media", MEDIANA = "mediana",
+MODA = "moda", VARIANZA = "varianza", MAX = "max", MIN = "min", NUMERO = [0-9]+, DECIMAL = {NUMERO}\.{NUMERO}, CADENA = \"[^\"]*\", GBAR = "graphBar",
+GPIE = "graphPie", GLINE = "graphLine", GHISTOGRAM = "histogram", OPENPAREN = "(", CLOSEPAREN = ")", EXEC = "exec", TITULO = "titulo", EJEX = "ejeX",
+EJEY = "ejeY", TITULOX = "tituloX", TITULOY = "tituloY", LABEL = "label", VALUES = "values"
+
+Gramática:
+
 <inicio> ::= 'PROGRAM' <declaraciones> 'END' 'PROGRAM';
 
 <declaraciones> ::= <declaraciones> <sentencia>

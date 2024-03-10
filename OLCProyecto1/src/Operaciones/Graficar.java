@@ -35,7 +35,9 @@ public class Graficar {
         try {
             ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), barChart, 360, 310);
             Util.imagenes.add("img/"+tituloLimpio+".png");
+            System.out.println("SE GUARDO LA GRAFICA");
         } catch (Exception e) {
+            System.out.println("ERROR GRAFICO");
             e.printStackTrace();
         }
     }
@@ -59,6 +61,7 @@ public class Graficar {
         try {
             ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), pieChart, 360, 310);
             Util.imagenes.add("img/"+tituloLimpio+".png");
+            System.out.println("SE GUARDO LA GRAFICA");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,6 +81,7 @@ public class Graficar {
         try {
             ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), barChart, 360, 310);
             Util.imagenes.add("img/"+tituloLimpio+".png");
+            System.out.println("SE GUARDO LA GRAFICA");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,6 +105,7 @@ public class Graficar {
         try {
             ChartUtilities.saveChartAsPNG(new File("img/"+tituloLimpio+".png"), histogram, 360, 310);
             Util.imagenes.add("img/"+tituloLimpio+".png");
+            System.out.println("SE GUARDO LA GRAFICA");
         } catch (Exception e) {
                 e.printStackTrace();
             }

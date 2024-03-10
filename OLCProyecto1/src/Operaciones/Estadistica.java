@@ -22,14 +22,15 @@ public class Estadistica {
     }
     
     public static double mediana(double[] array){
-        Arrays.sort(array);
-        int n = array.length;
+        double[] newArray = array.clone();
+        Arrays.sort(newArray);
+        int n = newArray.length;
         double mediana;
         if (n % 2 != 0) {
-            mediana =  array[n/2];
+            mediana =  newArray[n/2];
             return mediana;
         } else {
-            mediana = (array[(n/2)-1] + array[n/2]) / 2;
+            mediana = (newArray[(n/2)-1] + newArray[n/2]) / 2;
             return mediana;
           }
     }

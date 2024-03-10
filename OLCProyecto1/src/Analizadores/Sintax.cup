@@ -355,32 +355,58 @@ variable ::= IDENTIFICADOR:id   {:
             :}
 ;
 
-declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
-                        String titulo = Util.atributesGraph.get("Titulo").toString();
-                        String [] ejex = (String[]) Util.atributesGraph.get("ejex");
-                        double [] ejey = (double[]) Util.atributesGraph.get("ejey");
-                        String titulox = Util.atributesGraph.get("Titulox").toString();
-                        String tituloy = Util.atributesGraph.get("Tituloy").toString();
-                        Graficar.grafica_barras(titulo, ejex, ejey, titulox, tituloy);
+declaracion_grafico ::= GBAR OPENPAREN sentencia_grafico:graf EXEC GBAR END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
+                        System.out.println("ENTRO A BAR SINTAC");
+                        try {
+                            String titulo = Util.atributesGraph.get("Titulo").toString();
+                            String [] ejex = (String[]) Util.atributesGraph.get("ejex");
+                            double [] ejey = (double[]) Util.atributesGraph.get("ejey");
+                            String titulox = Util.atributesGraph.get("Titulox").toString();
+                            String tituloy = Util.atributesGraph.get("Tituloy").toString();
+                            Graficar.grafica_barras(titulo, ejex, ejey, titulox, tituloy);
+                        } catch (NullPointerException e) {
+                            System.out.println("ERROR GRAFICO");
+                            Util.errores.add(new Errores("SINTACTICO", grafleft, grafright, "Falto atributo de la grafica \nde barras")); 
+                        }
+                        Util.atributesGraph.clear();
                     :}
-                    | GPIE OPENPAREN sentencia_grafico EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
-                        String titulo = Util.atributesGraph.get("Titulo").toString();
-                        double[] values = (double[]) Util.atributesGraph.get("values");
-                        String [] labels = (String[]) Util.atributesGraph.get("labels");
-                        Graficar.graficar_pie(titulo, values, labels);
+                    | GPIE OPENPAREN sentencia_grafico:graf EXEC GPIE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
+                    System.out.println("ENTRO A PIE SINTAC");
+                        try {
+                            String titulo = Util.atributesGraph.get("Titulo").toString();
+                            double[] values = (double[]) Util.atributesGraph.get("values");
+                            String [] labels = (String[]) Util.atributesGraph.get("labels");
+                            Graficar.graficar_pie(titulo, values, labels);
+                        } catch (NullPointerException e) {
+                            System.out.println("ERROR GRAFICO");
+                            Util.errores.add(new Errores("SINTACTICO", grafleft, grafright, "Falto atributo de la grafica \nde pie")); 
+                        }
+                        Util.atributesGraph.clear();
                     :}
-                    | GLINE OPENPAREN sentencia_grafico EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
-                        String titulo = Util.atributesGraph.get("Titulo").toString();
-                        String [] ejex = (String[]) Util.atributesGraph.get("ejex");
-                        double [] ejey = (double[]) Util.atributesGraph.get("ejey");
-                        String titulox = Util.atributesGraph.get("Titulox").toString();
-                        String tituloy = Util.atributesGraph.get("Tituloy").toString();
-                        Graficar.grafica_linea(titulo, ejex, ejey, titulox, tituloy);
+                    | GLINE OPENPAREN sentencia_grafico:graf EXEC GLINE END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA {:
+                        try {
+                            String titulo = Util.atributesGraph.get("Titulo").toString();
+                            String [] ejex = (String[]) Util.atributesGraph.get("ejex");
+                            double [] ejey = (double[]) Util.atributesGraph.get("ejey");
+                            String titulox = Util.atributesGraph.get("Titulox").toString();
+                            String tituloy = Util.atributesGraph.get("Tituloy").toString();
+                            Graficar.grafica_linea(titulo, ejex, ejey, titulox, tituloy);
+                        } catch (NullPointerException e) {
+                            System.out.println("ERROR GRAFICO");
+                            Util.errores.add(new Errores("SINTACTICO", grafleft, grafright, "Falto atributo de la grafica \nde linea")); 
+                        }
+                        Util.atributesGraph.clear();
                     :}
-                    | GHISTOGRAM OPENPAREN sentencia_grafico EXEC GHISTOGRAM END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
-                        String titulo = Util.atributesGraph.get("Titulo").toString();   
-                        double[] values = (double[]) Util.atributesGraph.get("values");
-                        Graficar.grafica_histograma(titulo, values);
+                    | GHISTOGRAM OPENPAREN sentencia_grafico:graf EXEC GHISTOGRAM END PUNTO_Y_COMA CLOSEPAREN END PUNTO_Y_COMA   {:
+                        try {
+                            String titulo = Util.atributesGraph.get("Titulo").toString();   
+                            double[] values = (double[]) Util.atributesGraph.get("values");
+                            Graficar.grafica_histograma(titulo, values);
+                        } catch (NullPointerException e) {
+                            System.out.println("ERROR GRAFICO");
+                            Util.errores.add(new Errores("SINTACTICO", grafleft, grafright, "Falto atributo de la grafica \nhistograma")); 
+                        }
+                        Util.atributesGraph.clear();
                     :}
 ;
 
@@ -406,4 +432,5 @@ atributosGraph ::= TITULO DOS_PUNTOS IDENTIFICADOR IGUAL valor:titulo END PUNTO_
                 | VALUES DOS_PUNTOS IDENTIFICADOR IGUAL arreglo_double:values END PUNTO_Y_COMA
                 {: double[] array = (double[]) values;
                     Util.atributesGraph.put("values",array);  :}
+                | error PUNTO_Y_COMA
 ;
