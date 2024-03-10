@@ -55,11 +55,6 @@
             <Property name="text" type="java.lang.String" value="Pesta&#xf1;as"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="openP">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Abrir Pesta&#xf1;a"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="closeP">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Eliminar Pesta&#xf1;a"/>

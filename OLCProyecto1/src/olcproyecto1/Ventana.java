@@ -57,7 +57,6 @@ public class Ventana extends javax.swing.JFrame {
         openArchivo = new javax.swing.JMenuItem();
         save = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        openP = new javax.swing.JMenuItem();
         closeP = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jEjecutarBoton = new javax.swing.JMenuItem();
@@ -130,9 +129,6 @@ public class Ventana extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Pestañas");
-
-        openP.setText("Abrir Pestaña");
-        jMenu2.add(openP);
 
         closeP.setText("Eliminar Pestaña");
         closeP.addActionListener(new java.awt.event.ActionListener() {
@@ -445,7 +441,6 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel lienzo;
     private javax.swing.JMenuItem newArchivo;
     private javax.swing.JMenuItem openArchivo;
-    private javax.swing.JMenuItem openP;
     private javax.swing.JTabbedPane panelEntrada;
     private javax.swing.JMenuItem save;
     // End of variables declaration//GEN-END:variables
